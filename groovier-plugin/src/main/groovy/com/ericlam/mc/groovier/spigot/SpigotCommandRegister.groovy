@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.SimpleCommandMap
 import org.bukkit.plugin.Plugin
-import org.bukkit.plugin.SimplePluginManager
 import org.bukkit.plugin.java.JavaPlugin
 
 import javax.annotation.Nullable
@@ -46,16 +45,16 @@ class SpigotCommandRegister implements CommandRegister {
 
         var method = methodOpt.get()
 
-        if (method.getParameterCount() == 0) {
+        if (method.parameterCount == 0) {
             throw new ValidateFailedException("Command script method must have at least CommandSender parameter.")
         }
 
-        if (method.getParameterTypes()[0] != CommandSender.class) {
+        if (method.parameterTypes[0] != CommandSender.class) {
             throw new ValidateFailedException("Command script method must have CommandSender parameter.")
         }
 
 
-        var tabMethod = scriptClass.getMethods().find { m -> m.getName() == "tabComplete"}
+        var tabMethod = scriptClass.getMethods().find { m -> m.getName() == "tabComplete" }
         if (tabMethod == null) return
         //plugin.getLogger().info("expected: ${[CommandSender.class, String[].class].toArray()}")
         //plugin.getLogger().info("actual: ${tabMethod.parameterTypes}")
@@ -72,7 +71,7 @@ class SpigotCommandRegister implements CommandRegister {
         return (SimpleCommandMap) commandMap.get(Bukkit.server)
     }
 
-    private static void syncCommands() throws Exception{
+    private static void syncCommands() throws Exception {
         var syncCommandsMethod = Bukkit.server.class.getMethod("syncCommands")
         syncCommandsMethod.invoke(Bukkit.server)
     }
@@ -87,7 +86,7 @@ class SpigotCommandRegister implements CommandRegister {
             knownCommands.setAccessible(true)
             var commands = (Map<String, Command>) knownCommands.get(map)
             rootCommands.forEach(commands::remove)
-            runTaskOrNot { syncCommands()}
+            runTaskOrNot { syncCommands() }
         } catch (Exception e) {
             e.printStackTrace()
             plugin.getLogger().warning("failed to unregister commands: " + e.getMessage())
@@ -134,10 +133,10 @@ class SpigotCommandRegister implements CommandRegister {
     }
 
 
-    private void runTaskOrNot(Closure<Void> task){
-        if(Bukkit.isPrimaryThread()){
+    private void runTaskOrNot(Closure<Void> task) {
+        if (Bukkit.isPrimaryThread()) {
             task.call()
-        }else{
+        } else {
             Bukkit.getScheduler().runTask(plugin, task)
         }
     }

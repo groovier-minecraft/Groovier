@@ -1,4 +1,4 @@
-package spigot.listeners
+package listeners
 
 
 import org.bukkit.event.EventHandler

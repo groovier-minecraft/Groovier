@@ -1,0 +1,6 @@
+name: Groovier
+description: "A Scripts Engine based on Groovy"
+author: "Eric Lam"
+website: "https://github.com/eric2788"
+version: ${project.version}
+main: com.ericlam.mc.groovier.bungee.GroovierPlugin

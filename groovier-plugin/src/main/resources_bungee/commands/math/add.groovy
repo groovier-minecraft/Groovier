@@ -1,10 +1,11 @@
-package spigot.commands.math
+package commands.math
 
 import com.ericlam.mc.groovier.CommandScript
 import com.ericlam.mc.groovier.CommandArg
 import groovy.transform.Field
-import org.bukkit.command.CommandSender
-import spigot.services.MathService
+import net.md_5.bungee.api.CommandSender
+import net.md_5.bungee.api.chat.TextComponent
+import services.MathService
 
 import javax.inject.Inject
 
@@ -15,6 +16,6 @@ import javax.inject.Inject
 
 @CommandScript(description = 'add two numbers')
 void add(CommandSender sender, @CommandArg('one') int a, @CommandArg('two') int b) {
-    sender.sendMessage("$a + $b = ${mathService.add(a, b)}")
+    sender.sendMessage(TextComponent.fromLegacyText("$a + $b = ${mathService.add(a, b)}"))
 }
 

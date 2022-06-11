@@ -1,4 +1,4 @@
-package spigot.commands
+package commands
 
 import com.ericlam.mc.groovier.CommandArg
 import com.ericlam.mc.groovier.CommandScript
@@ -19,8 +19,8 @@ void checkInfo(CommandSender sender, @CommandArg(value = 'player', optional = tr
         return
     }
 
-    sender.sendMessage("Player: ${player.getName()}")
-    sender.sendMessage("UUID: ${player.getUniqueId()}")
+    sender.sendMessage("Player: ${player.name}")
+    sender.sendMessage("UUID: ${player.uniqueId}")
     sender.sendMessage("GameMode: ${player.gameMode}")
 }
 

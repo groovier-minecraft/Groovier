@@ -44,6 +44,7 @@ class GroovierPlugin extends JavaPlugin implements ScriptPlugin {
         if (!copyDefault) return
         try {
             core.copyFromJar("spigot", getPluginFolder().toPath())
+            core.copyFromJar("services", getPluginFolder().toPath())
         } catch (URISyntaxException | IOException e) {
             getLogger().warning("Failed to copy resources: " + e.getMessage())
             e.printStackTrace()

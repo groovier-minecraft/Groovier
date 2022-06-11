@@ -1,30 +1,29 @@
-package com.ericlam.mc.groovier.spigot
+package com.ericlam.mc.groovier.bungee
 
 import com.ericlam.mc.groovier.*
 import com.google.inject.Injector
 import com.google.inject.TypeLiteral
-import org.bukkit.ChatColor
-import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
-import org.bukkit.command.CommandSender
-import org.bukkit.command.TabCompleter
-import org.bukkit.plugin.java.JavaPlugin
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.CommandSender
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.api.plugin.Plugin
 
 import javax.annotation.Nullable
 import java.lang.reflect.Parameter
 import java.util.concurrent.ConcurrentHashMap
 
-@SuppressWarnings("unchecked")
-class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
+class BungeeCommandInvoker {
+
+    private final Map<Class<?>, Object> scriptInstanceCache = new ConcurrentHashMap<>()
 
     private final Map<String, Object> commandScripts
-    private final Map<Class<?>, Object> scriptInstanceCache = new ConcurrentHashMap<>()
-    private final JavaPlugin plugin
+    private final Plugin plugin
 
     private final ServiceInjector serviceInjector
     private final ArgumentParser argumentParser
 
-    SpigotCommandInvoker(Map<String, Object> commandScripts, JavaPlugin plugin) {
+    BungeeCommandInvoker(Map<String, Object> commandScripts, Plugin plugin) {
         this.commandScripts = commandScripts
         this.plugin = plugin
         this.serviceInjector = GroovierCore.api.serviceInjector
@@ -33,12 +32,11 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
         this.initializeScripts(this.commandScripts, injector)
     }
 
-
-    private void initializeScripts(Map<String, Object> scripts, Injector injector){
+    private void initializeScripts(Map<String, Object> scripts, Injector injector) {
         scripts.forEach((name, o) -> {
             if (o instanceof Map<?, ?>) {
                 initializeScripts(o as Map<String, Object>, injector)
-            } else if (o instanceof Class<?>){
+            } else if (o instanceof Class<?>) {
                 var scriptClass = o as Class<Object>
                 var scriptInstance = injector.getInstance(scriptClass)
                 scriptInstanceCache.put(scriptClass, scriptInstance)
@@ -46,31 +44,40 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
         })
     }
 
-    @Override
-    boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        var cmd = command.getName().toLowerCase()
-        this.invokeMap(commandScripts, sender, cmd, args)
-        return true
+    @Nullable
+    private Object initializeInstance(Class<?> cls, Optional<Injector> injector) {
+        if (scriptInstanceCache.containsKey(cls)) return scriptInstanceCache.get(cls)
+        if (injector.isEmpty()) return null
+        var instance = injector.get().getInstance(cls as Class<Object>)
+        scriptInstanceCache.put(cls, instance)
+        return instance
     }
+
+
+    void invokeCommand(CommandSender sender, String command, String[] args) {
+        var cmd = command.toLowerCase()
+        this.invokeMap(commandScripts, sender, cmd, args)
+    }
+
 
     private void invokeMap(Map<String, Object> map, CommandSender sender, String cmd, String[] args) {
 
         if (!map.containsKey(cmd)) {
-            sender.sendMessage("${ChatColor.RED}unknown command, available commands: ${map.keySet()}")
+            sender.sendMessage(text("${ChatColor.RED}unknown command, available commands: ${map.keySet()}"))
             return
         }
 
         var o = map.get(cmd)
+
         if (o instanceof Class<?>) {
             var script = o as Class<?>
             this.invokeScript(script, sender, args)
-
         } else if (o instanceof Map<?, ?>) {
 
             Map<String, Object> tree = (Map<String, Object>) o
 
             if (args.length == 0) {
-                sender.sendMessage("${ChatColor.RED} unknown command, available commands: ${tree.keySet()}")
+                sender.sendMessage(text("${ChatColor.RED} unknown command, available commands: ${tree.keySet()}"))
                 return
             }
 
@@ -79,10 +86,9 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
             this.invokeMap(tree, sender, nextCmd, nextArgs)
 
         } else {
-            sender.sendMessage("${ChatColor.RED}this command is not supported")
+            sender.sendMessage(text("${ChatColor.RED}this command is not supported"))
             plugin.getLogger().warning("Unknown Type for Command: " + cmd + ", Command script must be a class or a map.")
         }
-
     }
 
     private void invokeScript(Class<?> cmd, CommandSender sender, String[] args) {
@@ -91,7 +97,7 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
         var script = initializeInstance(cmd, injectorOpt)
 
         if (script == null) {
-            sender.sendMessage("${ChatColor.RED}injector is not ready, cannot execute command")
+            sender.sendMessage(text("${ChatColor.RED}injector is not ready, cannot execute command"))
             return
         }
 
@@ -107,13 +113,13 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
 
         var permission = method.getAnnotation(CommandScript.class).permission()
 
-        if (!permission.isBlank() && !sender.hasPermission(permission)){
-            sender.sendMessage("${ChatColor.RED}you don't have permission to execute this command")
+        if (!permission.isBlank() && !sender.hasPermission(permission)) {
+            sender.sendMessage(text("${ChatColor.RED}you don't have permission to execute this command"))
             return
         }
 
         if (getRequiredArgumentCount(method.parameters) > args.length) {
-            sender.sendMessage("${ChatColor.RED} argument not enough: ${getArgumentNames(method.getParameters())}")
+            sender.sendMessage(text("${ChatColor.RED} argument not enough: ${getArgumentNames(method.getParameters())}"))
             return
         }
 
@@ -132,18 +138,18 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
             var t = param.getParameterizedType()
 
             // for multiple args
-            if (t == String[].class){
+            if (t == String[].class) {
                 parameterArg[i] = args
                 continue
-            } else if (t == new TypeLiteral<List<String>>(){}.type){
+            } else if (t == new TypeLiteral<List<String>>() {}.type) {
                 parameterArg[i] = Arrays.asList(args)
                 continue
             }
 
             try {
-                parameterArg[i] = this.argumentParser.parse(t, args[i-1])
+                parameterArg[i] = this.argumentParser.parse(t, args[i - 1])
             } catch (ArgumentParseException e) {
-                sender.sendMessage("${ChatColor.RED} cannot parse argument [${cmdArgName}]: ${e.getMessage()}")
+                sender.sendMessage(text("${ChatColor.RED} cannot parse argument [${cmdArgName}]: ${e.getMessage()}"))
                 return
             }
         }
@@ -154,10 +160,9 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
             method.invoke(script, parameterArg)
         } catch (Exception e) {
             e.printStackTrace()
-            sender.sendMessage("${ChatColor.RED} Exception while executing command: ${e.getMessage()}")
+            sender.sendMessage(text("${ChatColor.RED} Exception while executing command: ${e.getMessage()}"))
             plugin.getLogger().warning("Exception while executing command: " + cmd.getName())
         }
-
     }
 
     private static String getArgumentNames(Parameter[] parameters) {
@@ -182,22 +187,11 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
                 .size()
     }
 
-    @Nullable
-    private Object initializeInstance(Class<?> cls, Optional<Injector> injector){
-        if (scriptInstanceCache.containsKey(cls)) return scriptInstanceCache.get(cls)
-        if (injector.isEmpty()) return null
-        var instance = injector.get().getInstance(cls as Class<Object>)
-        scriptInstanceCache.put(cls, instance)
-        return instance
+    List<String> invokeTabComplete(CommandSender sender, String command, String[] args) {
+        return this.invokeTabs(this.commandScripts, sender, command.toLowerCase(), args)
     }
 
-    @Override
-    List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return this.invokeTabComplete(this.commandScripts, sender, command.getName().toLowerCase(), args)
-    }
-
-
-    private List<String> invokeTabComplete(Map<String, Object> map, CommandSender sender, String cmd, String[] args) {
+    private List<String> invokeTabs(Map<String, Object> map, CommandSender sender, String cmd, String[] args) {
         if (!map.containsKey(cmd)) return map.keySet().toList()
 
         var o = map.get(cmd)
@@ -209,7 +203,7 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
 
             var script = initializeInstance(scriptCls, injectorOptional)
 
-            if (script == null){
+            if (script == null) {
                 plugin.getLogger().warning("injector is not ready, cannot invoke tab complete")
                 return null
             }
@@ -231,12 +225,17 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
 
             String nextCmd = args[0].toLowerCase()
             String[] nextArgs = Arrays.copyOfRange(args, 1, args.length)
-            return this.invokeTabComplete(tree, sender, nextCmd, nextArgs)
+            return this.invokeTabs(tree, sender, nextCmd, nextArgs)
 
         } else {
             return null
         }
 
+    }
+
+
+    private static BaseComponent[] text(String str) {
+        return TextComponent.fromLegacyText(str)
     }
 
 }

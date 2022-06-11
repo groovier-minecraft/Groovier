@@ -1,4 +1,4 @@
-package spigot.arguments
+package arguments
 
 import com.ericlam.mc.groovier.ArgumentParseException
 import org.bukkit.Bukkit

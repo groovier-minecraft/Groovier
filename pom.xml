@@ -56,6 +56,34 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>save-resources</id>
+                            <phase>prepare-package</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <outputDirectory>${project.basedir}/target/classes</outputDirectory>
+                        <resources>
+                            <resource>
+                                <targetPath>spigot</targetPath>
+                                <directory>${project.basedir}/src/main/resources_spigot</directory>
+                            </resource>
+                            <resource>
+                                <targetPath>bungee</targetPath>
+                                <directory>${project.basedir}/src/main/resources_bungee</directory>
+                            </resource>
+                            <resource>
+                                <directory>${project.basedir}/src/main/resources</directory>
+                                <filtering>true</filtering>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.1</version>
                     <configuration>

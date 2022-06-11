@@ -1,4 +1,4 @@
-package spigot.services
+package services
 
 
 class MathService {

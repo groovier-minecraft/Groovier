@@ -18,21 +18,8 @@
         <maven.compiler.target>18</maven.compiler.target>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>xuan</id>
-            <url>https://xuancat.app:8443/repository/minecraft_environment/</url>
-        </repository>
-    </repositories>
-
 
     <dependencies>
-        <dependency>
-            <groupId>spigot</groupId>
-            <artifactId>1.18.2</artifactId>
-            <version>2</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>com.ericlam.mc.groovier</groupId>
             <artifactId>groovier-engine</artifactId>
@@ -56,7 +43,17 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>

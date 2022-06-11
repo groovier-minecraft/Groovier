@@ -1,4 +1,4 @@
-package spigot.arguments
+package arguments
 
 
 import org.bukkit.Bukkit
