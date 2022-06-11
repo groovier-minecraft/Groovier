@@ -1,0 +1,12 @@
+name: Groovier
+description: "A Scripts Engine based on Groovy"
+author: "Eric Lam"
+website: "https://github.com/eric2788"
+version: ${project.version}
+main: com.ericlam.mc.groovier.spigot.GroovierPlugin
+commands:
+  groovier:
+    usage: /groovier reload|version
+    description: "Run Groovy Scripts"
+    permission: groovier.command.use
+    permission-message: "You don't have permission to use this command."
