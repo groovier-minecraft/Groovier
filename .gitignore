@@ -8,6 +8,8 @@
 # IntelliJ
 out/
 
+javadocs
+
 # Compiled class file
 *.class
 

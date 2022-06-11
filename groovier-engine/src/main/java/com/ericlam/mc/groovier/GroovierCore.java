@@ -11,7 +11,7 @@ public class GroovierCore implements GroovierAPI {
     }
 
     @Override
-    public void addReloadable(Class<? extends ScriptLoader> reloadable) {
+    public void addScriptLoader(Class<? extends ScriptLoader> scriptLoader) {
         throw new UnsupportedOperationException("not plugin");
     }
 

@@ -1,0 +1,55 @@
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+name: Publish Process
+
+# ↓ 自動生成 下載檔案 及 javadoc
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        id: checkout-source
+        uses: actions/checkout@v2
+      - uses: eric2788/maven-jar-publish@v2
+        with:
+          java-version: 18
+          body: first version
+          upload-module: './groovier-plugin'
+      - name: 'Update javadocs'
+        id: update-javadoc
+        uses: eric2788/push-javadoc-branch@main
+        with:
+          use-maven: true
+          javadocs: javadocs
+
+  publish:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: latest-tag
+      - uses: jungwinter/split@v2
+        id: version
+        with:
+          msg: ${{ steps.latest-tag.outputs.tag }}
+          separator: '.'
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '18'
+          distribution: 'adopt'
+      - name: Publish package
+        run: mvn --batch-mode clean deploy
+        if: ${{ steps.version.outputs.length <= 3 }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

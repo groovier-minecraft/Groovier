@@ -30,10 +30,10 @@ public class GroovierCore implements GroovierLifeCycle, GroovierAPI {
         api = this;
 
         this.bindInstance(GroovierAPI.class, this);
-        this.addReloadable(ServiceScriptsManager.class);
-        this.addReloadable(CommandScriptsManager.class);
-        this.addReloadable(EventScriptsManager.class);
-        this.addReloadable(ArgumentScriptManager.class);
+        this.addScriptLoader(ServiceScriptsManager.class);
+        this.addScriptLoader(CommandScriptsManager.class);
+        this.addScriptLoader(EventScriptsManager.class);
+        this.addScriptLoader(ArgumentScriptManager.class);
         this.bindProvider(ArgumentParser.class, ArgumentParserProvider.class);
         this.bindProvider(ServiceInjector.class, ServiceInjectorProvider.class);
     }
@@ -68,8 +68,8 @@ public class GroovierCore implements GroovierLifeCycle, GroovierAPI {
     }
 
     @Override
-    public void addReloadable(Class<? extends ScriptLoader> reloadable) {
-        this.groovierModule.addReloadable(reloadable);
+    public void addScriptLoader(Class<? extends ScriptLoader> scriptLoader) {
+        this.groovierModule.addReloadable(scriptLoader);
     }
 
     @Override
