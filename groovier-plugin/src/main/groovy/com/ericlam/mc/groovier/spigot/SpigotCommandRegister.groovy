@@ -54,7 +54,7 @@ class SpigotCommandRegister implements CommandRegister {
             throw new ValidateFailedException("Command script method must have CommandSender parameter.")
         }
 
-        var pass = method.parameterTypes.every { c -> c == CommandSender.class ||  c.isAnnotationPresent(CommandArg.class) }
+        var pass = method.parameters.every { p -> p.type == CommandSender.class ||  p.isAnnotationPresent(CommandArg.class) }
         if (!pass){
             throw new ValidateFailedException("Command script method must have CommandSender parameter or parameter annotated with @CommandArg.")
         }
