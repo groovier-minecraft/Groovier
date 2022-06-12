@@ -4,6 +4,10 @@ import com.ericlam.mc.groovier.GroovierCore
 import com.ericlam.mc.groovier.ScriptPlugin
 import com.ericlam.mc.groovier.relodables.CommandRegister
 import com.ericlam.mc.groovier.relodables.EventRegister
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.CommandSender
+import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.api.plugin.Command
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.config.ConfigurationProvider
 import net.md_5.bungee.config.YamlConfiguration
@@ -25,6 +29,38 @@ class GroovierPlugin extends Plugin implements ScriptPlugin {
     @Override
     void onEnable() {
         core.onEnable(this)
+
+        var groovierCommand = new Command("groovier", "groovier.use") {
+            @Override
+            void execute(CommandSender sender, String[] args) {
+                if (hasPermission(sender)){
+                    sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.RED}no permission."))
+                }
+                if (args.length == 0) {
+                    sender.sendMessage(TextComponent.fromLegacyText("Usage: /groovier reload | version"))
+                    return
+                }
+                if (args[0].equalsIgnoreCase("reload")) {
+                    core.reloadAllScripts().whenComplete((v, ex) -> {
+                        if (ex != null) {
+                            sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.RED}Failed to reload scripts: " + ex.getMessage()))
+                            ex.printStackTrace()
+                        } else {
+                            sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.GREEN}Successfully reloaded scripts"))
+                        }
+                    })
+
+                    return
+                }
+                if (args[0].equalsIgnoreCase("version")) {
+                    sender.sendMessage(TextComponent.fromLegacyText("Groovier v${getDescription().getVersion()} by ${getDescription().getAuthor()}"))
+                    return
+                }
+                sender.sendMessage(TextComponent.fromLegacyText("Usage: /groovier reload | version"))
+            }
+        }
+
+        proxy.pluginManager.registerCommand(this, groovierCommand)
     }
 
     @Override
@@ -51,10 +87,12 @@ class GroovierPlugin extends Plugin implements ScriptPlugin {
         if (!copyDefault) return
         try {
             core.copyFromJar("bungee", getPluginFolder().toPath())
-            core.copyFromJar("services", getPluginFolder().toPath())
+            core.copyFromJar("common", getPluginFolder().toPath())
         } catch (URISyntaxException | IOException e) {
             getLogger().warning("Failed to copy resources: " + e.getMessage())
             e.printStackTrace()
         }
     }
+
+
 }

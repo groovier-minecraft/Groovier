@@ -7,6 +7,6 @@ main: com.ericlam.mc.groovier.spigot.GroovierPlugin
 commands:
   groovier:
     usage: /groovier reload|version
-    description: "Run Groovy Scripts"
-    permission: groovier.command.use
+    description: "Reload Groovy Scripts"
+    permission: groovier.use
     permission-message: "You don't have permission to use this command."

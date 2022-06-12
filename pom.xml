@@ -76,6 +76,10 @@
                                 <directory>${project.basedir}/src/main/resources_bungee</directory>
                             </resource>
                             <resource>
+                                <targetPath>common</targetPath>
+                                <directory>${project.basedir}/src/main/resources_common</directory>
+                            </resource>
+                            <resource>
                                 <directory>${project.basedir}/src/main/resources</directory>
                                 <filtering>true</filtering>
                             </resource>

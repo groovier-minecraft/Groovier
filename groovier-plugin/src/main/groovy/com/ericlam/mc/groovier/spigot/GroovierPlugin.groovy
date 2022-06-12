@@ -44,7 +44,7 @@ class GroovierPlugin extends JavaPlugin implements ScriptPlugin {
         if (!copyDefault) return
         try {
             core.copyFromJar("spigot", getPluginFolder().toPath())
-            core.copyFromJar("services", getPluginFolder().toPath())
+            core.copyFromJar("common", getPluginFolder().toPath())
         } catch (URISyntaxException | IOException e) {
             getLogger().warning("Failed to copy resources: " + e.getMessage())
             e.printStackTrace()
@@ -54,6 +54,10 @@ class GroovierPlugin extends JavaPlugin implements ScriptPlugin {
     @Override
     boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!command.getName().equalsIgnoreCase("groovier")) return false
+        if (!sender.hasPermission("groovier.use")) {
+            sender.sendMessage("${ChatColor.RED}no permission")
+            return
+        }
         if (args.length == 0) {
             sender.sendMessage("Usage: /groovier reload | version")
             return true

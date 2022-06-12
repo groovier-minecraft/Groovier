@@ -43,6 +43,12 @@ if you wish to use other library, you can use [@Grab / @Grapes annotation](http:
 to add dependency: 
 
 
+## Other links
+
+[javadocs](https://groovier-minecraft.github.io/Groovier/)
+
+[wiki](https://github.com/groovier-minecraft/Groovier/wiki)
+
 
 
 
