@@ -213,12 +213,12 @@
             <dependency>
                 <groupId>org.groovier</groupId>
                 <artifactId>groovier-engine</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.groovier</groupId>
                 <artifactId>groovier-scripts</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.spigotmc</groupId>

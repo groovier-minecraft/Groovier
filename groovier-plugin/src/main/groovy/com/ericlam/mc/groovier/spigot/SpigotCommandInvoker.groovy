@@ -1,6 +1,10 @@
 package com.ericlam.mc.groovier.spigot
 
-import com.ericlam.mc.groovier.*
+
+import com.ericlam.mc.groovier.ArgumentParseException
+import com.ericlam.mc.groovier.ArgumentParser
+import com.ericlam.mc.groovier.GroovierCore
+import com.ericlam.mc.groovier.ServiceInjector
 import com.ericlam.mc.groovier.command.CommandArg
 import com.ericlam.mc.groovier.command.CommandScript
 import com.google.inject.Injector
@@ -36,11 +40,11 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
     }
 
 
-    private void initializeScripts(Map<String, Object> scripts, Injector injector){
+    private void initializeScripts(Map<String, Object> scripts, Injector injector) {
         scripts.forEach((name, o) -> {
             if (o instanceof Map<?, ?>) {
                 initializeScripts(o as Map<String, Object>, injector)
-            } else if (o instanceof Class<?>){
+            } else if (o instanceof Class<?>) {
                 var scriptClass = o as Class<Object>
                 var scriptInstance = injector.getInstance(scriptClass)
                 scriptInstanceCache.put(scriptClass, scriptInstance)
@@ -97,19 +101,18 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
             return
         }
 
-        var executable = Arrays.stream(cmd.getMethods())
-                .filter(m -> m.isAnnotationPresent(CommandScript.class) && m.getParameterCount() > 0)
-                .findAny()
+        // find largest parameter count first
+        var method = cmd.methods
+                .findAll { m -> m.isAnnotationPresent(CommandScript.class) && m.parameterCount > 0 }
+                .max { m -> m.parameterCount }
 
-        if (executable.isEmpty()) {
+        if (method == null) {
             throw new IllegalStateException("cannot find command runner inside script: " + cmd.getName())
         }
 
-        var method = executable.get()
-
         var permission = method.getAnnotation(CommandScript.class).permission()
 
-        if (!permission.isBlank() && !sender.hasPermission(permission)){
+        if (!permission.isBlank() && !sender.hasPermission(permission)) {
             sender.sendMessage("${ChatColor.RED}you don't have permission to execute this command")
             return
         }
@@ -130,34 +133,42 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
             if (!param.isAnnotationPresent(CommandArg.class)) {
                 throw new IllegalStateException("parameter must be annotated with @CommandArg (except CommandSender)")
             }
-            var cmdArgName = param.getAnnotation(CommandArg.class).value()
+            var arg = param.getAnnotation(CommandArg.class)
+            var cmdArgName = arg.value()
             var t = param.getParameterizedType()
 
             // for multiple args
-            if (t == String[].class){
+            if (t == String[].class) {
                 parameterArg[i] = args
                 continue
-            } else if (t == new TypeLiteral<List<String>>(){}.type){
+            } else if (t == new TypeLiteral<List<String>>() {}.type) {
                 parameterArg[i] = Arrays.asList(args)
                 continue
             }
 
             try {
-                parameterArg[i] = this.argumentParser.parse(t, args[i-1])
+                parameterArg[i] = this.argumentParser.parse(t, args[i - 1])
             } catch (ArgumentParseException e) {
                 sender.sendMessage("${ChatColor.RED} cannot parse argument [${cmdArgName}]: ${e.getMessage()}")
                 return
+            } catch (IndexOutOfBoundsException ignored) {
+                if (!arg.optional()) {
+                    sender.sendMessage("${ChatColor.RED}argument not enough: ${getArgumentNames(params)}")
+                }
             }
         }
 
         try {
-            // plugin.logger.info("expected: ${method.genericParameterTypes.toArrayString()}")
-            // plugin.logger.info("actual: ${parameterArg.collect { arg -> arg.class }.toArray()}")
-            method.invoke(script, parameterArg)
+            //plugin.logger.info("expected: ${method.genericParameterTypes.toArrayString()}")
+            //plugin.logger.info("actual: ${parameterArg.collect { arg -> arg?.class }.toArray()}")
+            script.invokeMethod(method.name, parameterArg.findAll { m -> m != null })
+        } catch (MissingMethodException e){
+            plugin.logger.warning("cannot find method: ${method.name}, have you set the default value for optional argument parameter? (${e.message})")
+            sender.sendMessage("${ChatColor.RED} error while executing command: ${e.message}")
         } catch (Exception e) {
             e.printStackTrace()
-            sender.sendMessage("${ChatColor.RED} Exception while executing command: ${e.getMessage()}")
-            plugin.getLogger().warning("Exception while executing command: " + cmd.getName())
+            sender.sendMessage("${ChatColor.RED} Exception while executing command: ${e.message}")
+            plugin.getLogger().warning("Exception while executing command: " + cmd.name)
         }
 
     }
@@ -176,7 +187,7 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
                 .toList().join(", ")
     }
 
-    private static int getRequiredArgumentCount(Parameter[] parameters){
+    private static int getRequiredArgumentCount(Parameter[] parameters) {
         return parameters
                 .findAll { p -> p.isAnnotationPresent(CommandArg.class) }
                 .collect { p -> p.getAnnotation(CommandArg.class) }
@@ -185,7 +196,7 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
     }
 
     @Nullable
-    private Object initializeInstance(Class<?> cls, Optional<Injector> injector){
+    private Object initializeInstance(Class<?> cls, Optional<Injector> injector) {
         if (scriptInstanceCache.containsKey(cls)) return scriptInstanceCache.get(cls)
         if (injector.isEmpty()) return null
         var instance = injector.get().getInstance(cls as Class<Object>)
@@ -211,7 +222,7 @@ class SpigotCommandInvoker implements TabCompleter, CommandExecutor {
 
             var script = initializeInstance(scriptCls, injectorOptional)
 
-            if (script == null){
+            if (script == null) {
                 plugin.getLogger().warning("injector is not ready, cannot invoke tab complete")
                 return null
             }

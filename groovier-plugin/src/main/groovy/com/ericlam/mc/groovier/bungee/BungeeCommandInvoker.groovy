@@ -103,15 +103,14 @@ class BungeeCommandInvoker {
             return
         }
 
-        var executable = Arrays.stream(cmd.getMethods())
-                .filter(m -> m.isAnnotationPresent(CommandScript.class) && m.getParameterCount() > 0)
-                .findAny()
+        // find largest parameter count first
+        var method = cmd.methods
+                .findAll { m -> m.isAnnotationPresent(CommandScript.class) && m.parameterCount > 0 }
+                .max { m -> m.parameterCount }
 
-        if (executable.isEmpty()) {
+        if (method == null) {
             throw new IllegalStateException("cannot find command runner inside script: " + cmd.getName())
         }
-
-        var method = executable.get()
 
         var permission = method.getAnnotation(CommandScript.class).permission()
 
@@ -136,7 +135,8 @@ class BungeeCommandInvoker {
             if (!param.isAnnotationPresent(CommandArg.class)) {
                 throw new IllegalStateException("parameter must be annotated with @CommandArg (except CommandSender)")
             }
-            var cmdArgName = param.getAnnotation(CommandArg.class).value()
+            var arg = param.getAnnotation(CommandArg.class)
+            var cmdArgName = arg.value()
             var t = param.getParameterizedType()
 
             // for multiple args
@@ -153,13 +153,21 @@ class BungeeCommandInvoker {
             } catch (ArgumentParseException e) {
                 sender.sendMessage(text("${ChatColor.RED} cannot parse argument [${cmdArgName}]: ${e.getMessage()}"))
                 return
+            } catch (IndexOutOfBoundsException ignored){
+                if (!arg.optional()){
+                    sender.sendMessage(text("${ChatColor.RED} argument not enough: ${getArgumentNames(param)}"))
+                    return
+                }
             }
         }
 
         try {
             // plugin.logger.info("expected: ${method.genericParameterTypes.toArrayString()}")
             // plugin.logger.info("actual: ${parameterArg.collect { arg -> arg.class }.toArray()}")
-            method.invoke(script, parameterArg)
+            script.invokeMethod(method.name, parameterArg.findAll { arg -> arg != null })
+        } catch (MissingMethodException e){
+            plugin.logger.warning("cannot find method: ${method.name}, have you set the default value for optional argument parameter? (${e.message})")
+            sender.sendMessage(text("${ChatColor.RED} error while executing command: ${e.getMessage()}"))
         } catch (Exception e) {
             e.printStackTrace()
             sender.sendMessage(text("${ChatColor.RED} Exception while executing command: ${e.getMessage()}"))

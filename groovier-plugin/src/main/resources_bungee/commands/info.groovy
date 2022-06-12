@@ -9,7 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
 // showcase for custom argument parsing
 
 @CommandScript(description = 'check player info')
-void info(CommandSender sender, @CommandArg(value = 'player', optional = true) ProxiedPlayer player){
+void info(CommandSender sender, @CommandArg(value = 'player', optional = true) ProxiedPlayer player = null){
 
     if (player == null && sender instanceof ProxiedPlayer) {
         player = (ProxiedPlayer)sender

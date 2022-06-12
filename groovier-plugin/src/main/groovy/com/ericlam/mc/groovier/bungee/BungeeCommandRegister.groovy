@@ -1,6 +1,6 @@
 package com.ericlam.mc.groovier.bungee
 
-
+import com.ericlam.mc.groovier.command.CommandArg
 import com.ericlam.mc.groovier.command.CommandScript
 import com.ericlam.mc.groovier.ValidateFailedException
 import com.ericlam.mc.groovier.scriptloaders.CommandRegister
@@ -30,7 +30,7 @@ class BungeeCommandRegister implements CommandRegister {
         var methodOpt = Arrays.stream(scriptClass.getMethods()).filter(m -> m.isAnnotationPresent(CommandScript.class)).findAny()
 
         if (methodOpt.isEmpty()) {
-            throw new ValidateFailedException("Command script must have a method annotated with @Command.")
+            throw new ValidateFailedException("Command script must have a method annotated with @CommandScript.")
         }
 
         var method = methodOpt.get()
@@ -42,6 +42,12 @@ class BungeeCommandRegister implements CommandRegister {
         if (method.parameterTypes[0] != CommandSender.class) {
             throw new ValidateFailedException("Command script method must have CommandSender parameter.")
         }
+
+        var pass = method.parameterTypes.every { c -> c == org.bukkit.command.CommandSender.class ||  c.isAnnotationPresent(CommandArg.class) }
+        if (!pass){
+            throw new ValidateFailedException("Command script method must have CommandSender parameter or parameter annotated with @CommandArg.")
+        }
+
 
         var tabMethod = scriptClass.getMethods().find { m -> m.getName() == "tabComplete" }
         if (tabMethod == null) return

@@ -20,7 +20,7 @@ jobs:
       - uses: eric2788/maven-jar-publish@v2
         with:
           java-version: 18
-          body: first version
+          body: fix optional command argument problem
           upload-module: './groovier-plugin'
       - name: 'Update javadocs'
         id: update-javadoc
