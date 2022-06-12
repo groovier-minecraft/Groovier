@@ -1,5 +1,7 @@
 package com.ericlam.mc.groovier
 
+import groovy.grape.Grape
+
 import javax.inject.Inject
 
 class GroovierScriptLoader {
@@ -17,8 +19,13 @@ class GroovierScriptLoader {
     @Inject
     private ScriptPlugin plugin
 
-
     void loadAllScripts() {
+        var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
+        if (globalLibraries.exists()) {
+            plugin.logger.info("loading global libraries...")
+            classLoader.parseClass(globalLibraries)
+            plugin.logger.info("global libraries loaded.")
+        }
         loaders.forEach(loader -> {
             plugin.getLogger().info("Loading ${loader.class.simpleName}")
             loader.load(classLoader)
