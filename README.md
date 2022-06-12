@@ -25,6 +25,8 @@ Groovier/
         |- say.groovy ------------------------ single file, usage will be /say 
         |- info.groovy ----------------------- single file, usage will be /info
         |- love.groovy ----------------------- single file, usage will be /love
+    |- lifecycles ---------------------------- groovy scripts for lifecycle, including plugin life cycle and script life cycle
+        |- testLifeCycle.groovy -------------- will invoke method on lifecycle
     |- services ------------------------------ groovy scripts for services
         |- mathService.groovy ---------------- service for math, used for /math <args>
     |- arguments ----------------------------- groovy scripts for command arguments
@@ -33,7 +35,7 @@ Groovier/
     |- config.yml ---------------------------- configuration file
 ```
 
-In the above structure, `listeners`, `arguments`, `commands`, and `services` will be the root folders.
+In the above structure, `listeners`, `arguments`, `commands`, `lifecycles` and `services` will be the root folders.
 
 ## How to use groovy script?
 
