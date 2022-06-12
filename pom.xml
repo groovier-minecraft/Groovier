@@ -102,6 +102,8 @@
                         <links>
                             <link>https://google.github.io/guice/api-docs/latest/javadoc/</link>
                             <link>https://docs.oracle.com/en/java/javase/18/docs/api/</link>
+                            <link>https://docs.oracle.com/javaee/6/api/javax/inject/</link>
+                            <link>https://docs.groovy-lang.org/latest/html/api/</link>
                         </links>
                         <show>public</show>
                         <isOffline>false</isOffline>
