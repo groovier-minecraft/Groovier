@@ -1,7 +1,7 @@
 package commands.math
 
-import com.ericlam.mc.groovier.CommandScript
-import com.ericlam.mc.groovier.CommandArg
+import com.ericlam.mc.groovier.command.CommandScript
+import com.ericlam.mc.groovier.command.CommandArg
 import groovy.transform.Field
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.chat.TextComponent

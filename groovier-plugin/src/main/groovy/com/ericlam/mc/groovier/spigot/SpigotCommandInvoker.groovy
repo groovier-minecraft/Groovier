@@ -1,6 +1,8 @@
 package com.ericlam.mc.groovier.spigot
 
 import com.ericlam.mc.groovier.*
+import com.ericlam.mc.groovier.command.CommandArg
+import com.ericlam.mc.groovier.command.CommandScript
 import com.google.inject.Injector
 import com.google.inject.TypeLiteral
 import org.bukkit.ChatColor

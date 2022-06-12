@@ -3,7 +3,7 @@ package com.ericlam.mc.groovier.bungee
 import com.ericlam.mc.groovier.GroovierAPI
 import com.ericlam.mc.groovier.GroovierCore
 import com.ericlam.mc.groovier.ValidateFailedException
-import com.ericlam.mc.groovier.relodables.EventRegister
+import com.ericlam.mc.groovier.scriptloaders.EventRegister
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.implementation.MethodDelegation
 import net.md_5.bungee.api.ProxyServer

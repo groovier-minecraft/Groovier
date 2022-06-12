@@ -1,4 +1,4 @@
-package com.ericlam.mc.groovier.relodables
+package com.ericlam.mc.groovier.scriptloaders
 
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes

@@ -1,8 +1,9 @@
 package com.ericlam.mc.groovier.bungee
 
-import com.ericlam.mc.groovier.CommandScript
+
+import com.ericlam.mc.groovier.command.CommandScript
 import com.ericlam.mc.groovier.ValidateFailedException
-import com.ericlam.mc.groovier.relodables.CommandRegister
+import com.ericlam.mc.groovier.scriptloaders.CommandRegister
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.plugin.Command

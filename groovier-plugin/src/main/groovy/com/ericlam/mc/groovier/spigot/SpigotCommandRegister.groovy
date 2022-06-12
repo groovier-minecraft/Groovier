@@ -1,8 +1,8 @@
 package com.ericlam.mc.groovier.spigot
 
-import com.ericlam.mc.groovier.CommandScript
+import com.ericlam.mc.groovier.command.CommandScript
 import com.ericlam.mc.groovier.ValidateFailedException
-import com.ericlam.mc.groovier.relodables.CommandRegister
+import com.ericlam.mc.groovier.scriptloaders.CommandRegister
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -86,7 +86,11 @@ class SpigotCommandRegister implements CommandRegister {
             knownCommands.setAccessible(true)
             var commands = (Map<String, Command>) knownCommands.get(map)
             rootCommands.forEach(commands::remove)
-            runTaskOrNot { syncCommands() }
+            runTaskOrNot {
+                synchronized (map){
+                    syncCommands()
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace()
             plugin.getLogger().warning("failed to unregister commands: " + e.getMessage())
@@ -109,7 +113,11 @@ class SpigotCommandRegister implements CommandRegister {
                 this.registerCommand(rootCommand, invoker, description, map)
             }
 
-            runTaskOrNot { syncCommands() }
+            runTaskOrNot {
+                synchronized (map) {
+                    syncCommands()
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace()
             plugin.getLogger().warning("failed to get command map: " + e.getMessage())

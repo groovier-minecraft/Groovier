@@ -2,8 +2,8 @@ package com.ericlam.mc.groovier.spigot
 
 import com.ericlam.mc.groovier.GroovierCore
 import com.ericlam.mc.groovier.ScriptPlugin
-import com.ericlam.mc.groovier.relodables.CommandRegister
-import com.ericlam.mc.groovier.relodables.EventRegister
+import com.ericlam.mc.groovier.scriptloaders.CommandRegister
+import com.ericlam.mc.groovier.scriptloaders.EventRegister
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender

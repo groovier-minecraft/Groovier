@@ -212,12 +212,12 @@
             </dependency>
             <dependency>
                 <groupId>org.groovier</groupId>
-                <artifactId>groovier-scripts</artifactId>
+                <artifactId>groovier-engine</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.groovier</groupId>
-                <artifactId>groovier-engine</artifactId>
+                <artifactId>groovier-scripts</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

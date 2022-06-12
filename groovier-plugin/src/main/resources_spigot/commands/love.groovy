@@ -1,7 +1,7 @@
 package commands
 
-import com.ericlam.mc.groovier.CommandArg
-import com.ericlam.mc.groovier.CommandScript
+import com.ericlam.mc.groovier.command.CommandArg
+import com.ericlam.mc.groovier.command.CommandScript
 import org.bukkit.command.CommandSender
 
 

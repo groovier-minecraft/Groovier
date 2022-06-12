@@ -2,8 +2,8 @@ package com.ericlam.mc.groovier.bungee
 
 import com.ericlam.mc.groovier.GroovierCore
 import com.ericlam.mc.groovier.ScriptPlugin
-import com.ericlam.mc.groovier.relodables.CommandRegister
-import com.ericlam.mc.groovier.relodables.EventRegister
+import com.ericlam.mc.groovier.scriptloaders.CommandRegister
+import com.ericlam.mc.groovier.scriptloaders.EventRegister
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.chat.TextComponent

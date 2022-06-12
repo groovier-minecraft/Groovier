@@ -1,6 +1,8 @@
 package com.ericlam.mc.groovier.bungee
 
 import com.ericlam.mc.groovier.*
+import com.ericlam.mc.groovier.command.CommandArg
+import com.ericlam.mc.groovier.command.CommandScript
 import com.google.inject.Injector
 import com.google.inject.TypeLiteral
 import net.md_5.bungee.api.ChatColor

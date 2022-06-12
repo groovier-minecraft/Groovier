@@ -1,11 +1,9 @@
 package com.ericlam.mc.groovier;
 
 import com.ericlam.mc.groovier.providers.ArgumentParserProvider;
+import com.ericlam.mc.groovier.providers.GroovierLifeCycleProvider;
 import com.ericlam.mc.groovier.providers.ServiceInjectorProvider;
-import com.ericlam.mc.groovier.relodables.ArgumentScriptManager;
-import com.ericlam.mc.groovier.relodables.CommandScriptsManager;
-import com.ericlam.mc.groovier.relodables.EventScriptsManager;
-import com.ericlam.mc.groovier.relodables.ServiceScriptsManager;
+import com.ericlam.mc.groovier.scriptloaders.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -20,7 +18,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class GroovierCore implements GroovierLifeCycle, GroovierAPI {
+public class GroovierCore implements GroovierAPI {
 
     private final GroovierModule groovierModule = new GroovierModule();
 
@@ -34,8 +32,10 @@ public class GroovierCore implements GroovierLifeCycle, GroovierAPI {
         this.addScriptLoader(CommandScriptsManager.class);
         this.addScriptLoader(EventScriptsManager.class);
         this.addScriptLoader(ArgumentScriptManager.class);
+        this.addScriptLoader(LifeCycleScriptsManager.class);
         this.bindProvider(ArgumentParser.class, ArgumentParserProvider.class);
         this.bindProvider(ServiceInjector.class, ServiceInjectorProvider.class);
+        this.bindProvider(GroovierLifeCycle.class, GroovierLifeCycleProvider.class);
     }
 
     public static GroovierAPI getApi() {
@@ -45,21 +45,25 @@ public class GroovierCore implements GroovierLifeCycle, GroovierAPI {
     private Injector injector;
     private GroovierScriptLoader loader;
 
-    @Override
+    private GroovierLifeCycle lifeCycle;
+
+
     public void onLoad(ScriptPlugin plugin) {
         groovierModule.bindScriptPlugin(plugin);
         plugin.copyResources();
     }
 
-    @Override
+
     public void onEnable(ScriptPlugin plugin) {
         injector = Guice.createInjector(groovierModule);
         loader = injector.getInstance(GroovierScriptLoader.class);
         loader.loadAllScripts();
+        lifeCycle = injector.getInstance(GroovierLifeCycle.class);
+        lifeCycle.onEnable();
     }
 
-    @Override
     public void onDisable(ScriptPlugin plugin) {
+        lifeCycle.onDisable();
         loader.unloadAllScripts();
     }
 
