@@ -12,6 +12,10 @@ check this out: https://groovy-lang.org/
 - you can add new scripts, edit existing scripts, and delete scripts from the plugin folder
 - after finished modification, do /groovier reload to reload the scripts
 
+### Developing a Script
+
+you can check the [wiki](ttps://github.com/groovier-minecraft/Groovier/wiki)
+
 ## Structures
 
 ```
@@ -32,6 +36,7 @@ Groovier/
     |- arguments ----------------------------- groovy scripts for command arguments
         |- player.groovy --------------------- command argument for player
         |- offlineplayer.groovy -------------- command argument for offline player
+    |- grapesConfig.groovy ------------------- groovy script for managing dependencies, you can add your extra dependencies here
     |- config.yml ---------------------------- configuration file
 ```
 
