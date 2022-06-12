@@ -100,6 +100,7 @@
                     </executions>
                     <configuration>
                         <links>
+                            <link>https://google.github.io/guice/api-docs/latest/javadoc/</link>
                             <link>https://docs.oracle.com/en/java/javase/18/docs/api/</link>
                         </links>
                         <show>public</show>
