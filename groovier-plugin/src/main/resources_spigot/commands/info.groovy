@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 
 @CommandScript(description = 'check player info')
-void checkInfo(CommandSender sender, @CommandArg(value = 'player', optional = true) Player player){
+void checkInfo(CommandSender sender, @CommandArg(value = 'player', optional = true) Player player = null){
 
     if (player == null && sender instanceof Player){
         player = (Player)sender

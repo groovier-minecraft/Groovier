@@ -14,7 +14,7 @@ import javax.inject.Inject
 @Field @Inject MathService mathService
 
 @CommandScript(description = 'add two numbers')
-void add(CommandSender sender, @CommandArg('one') int a, @CommandArg('two') int b) {
+void add(CommandSender sender, @CommandArg('one') int a, @CommandArg(value = 'two', optional = true) int b = 1) {
     sender.sendMessage("$a + $b = ${mathService.add(a, b)}")
 }
 
