@@ -52,6 +52,11 @@ class GroovierPlugin extends JavaPlugin implements ScriptPlugin {
     }
 
     @Override
+    void runSyncTask(Runnable runnable) {
+        getServer().getScheduler().runTask(this, runnable)
+    }
+
+    @Override
     boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!command.getName().equalsIgnoreCase("groovier")) return false
         if (!sender.hasPermission("groovier.use")) {

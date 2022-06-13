@@ -4,6 +4,7 @@ import com.ericlam.mc.groovier.scriptloaders.GroovierLifeCycle
 import groovy.grape.Grape
 
 import javax.inject.Inject
+import java.util.concurrent.CompletableFuture
 
 class GroovierScriptLoader {
 
@@ -23,20 +24,28 @@ class GroovierScriptLoader {
     @Inject
     private GroovierLifeCycle lifeCycle
 
-    void loadAllScripts() {
-        var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
-        if (globalLibraries.exists()) {
-            plugin.logger.info("loading global libraries...")
-            classLoader.parseClass(globalLibraries)
-            plugin.logger.info("global libraries loaded.")
-        }
-        loaders.forEach(loader -> {
-            plugin.getLogger().info("Loading ${loader.class.simpleName}")
-            loader.load(classLoader)
-            plugin.getLogger().info("${loader.class.simpleName} loading completed.")
+    CompletableFuture<Void> loadAllScripts() {
+        CompletableFuture<Void> future = new CompletableFuture<>()
+        CompletableFuture.runAsync(() -> {
+            var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
+            if (globalLibraries.exists()) {
+                plugin.logger.info("loading global libraries...")
+                classLoader.parseClass(globalLibraries)
+                plugin.logger.info("global libraries loaded.")
+            }
+            loaders.forEach(loader -> {
+                plugin.getLogger().info("Loading ${loader.class.simpleName}")
+                loader.load(classLoader)
+                plugin.getLogger().info("${loader.class.simpleName} loading completed.")
+            })
+            loaders.forEach(loader -> loader.afterLoad())
+        }).thenAccept((v) -> {
+            plugin.runSyncTask(() -> {
+                lifeCycle.onScriptLoad()
+                future.complete(v)
+            })
         })
-        loaders.forEach(loader -> loader.afterLoad())
-        lifeCycle.onScriptLoad()
+        return future
     }
 
     void unloadAllScripts() {
@@ -48,9 +57,9 @@ class GroovierScriptLoader {
         })
     }
 
-    void reloadAllScripts() {
+    CompletableFuture<Void> reloadAllScripts() {
         this.unloadAllScripts()
-        this.loadAllScripts()
+        return this.loadAllScripts()
     }
 
 }

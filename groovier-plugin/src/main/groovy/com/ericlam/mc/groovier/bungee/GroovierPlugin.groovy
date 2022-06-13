@@ -33,7 +33,7 @@ class GroovierPlugin extends Plugin implements ScriptPlugin {
         var groovierCommand = new Command("groovier", "groovier.use") {
             @Override
             void execute(CommandSender sender, String[] args) {
-                if (hasPermission(sender)){
+                if (hasPermission(sender)) {
                     sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.RED}no permission."))
                 }
                 if (args.length == 0) {
@@ -94,5 +94,8 @@ class GroovierPlugin extends Plugin implements ScriptPlugin {
         }
     }
 
-
+    @Override
+    void runSyncTask(Runnable runnable) {
+        runnable.run()
+    }
 }

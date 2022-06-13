@@ -14,4 +14,7 @@ public interface ScriptPlugin {
 
     Logger getLogger();
 
+
+    void runSyncTask(Runnable runnable);
+
 }

@@ -57,9 +57,15 @@ public class GroovierCore implements GroovierAPI {
     public void onEnable(ScriptPlugin plugin) {
         injector = Guice.createInjector(groovierModule);
         loader = injector.getInstance(GroovierScriptLoader.class);
-        loader.loadAllScripts();
-        lifeCycle = injector.getInstance(GroovierLifeCycle.class);
-        lifeCycle.onEnable();
+        loader.loadAllScripts().whenComplete((v, e) -> {
+            if (e != null) {
+                plugin.getLogger().severe("error while loading scripts: "+e.getMessage());
+                e.printStackTrace();
+                return;
+            }
+            lifeCycle = injector.getInstance(GroovierLifeCycle.class);
+            plugin.runSyncTask(() -> lifeCycle.onEnable());
+        });
     }
 
     public void onDisable(ScriptPlugin plugin) {
@@ -68,7 +74,7 @@ public class GroovierCore implements GroovierAPI {
     }
 
     public CompletableFuture<Void> reloadAllScripts(){
-        return CompletableFuture.runAsync(() -> loader.reloadAllScripts());
+        return loader.reloadAllScripts();
     }
 
     @Override
