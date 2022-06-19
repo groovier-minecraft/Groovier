@@ -15,6 +15,8 @@ class GroovierModule extends AbstractModule {
     private final Map<Class, Class> classMap = new HashMap<>()
     private final Map<Class, Class<Provider<?>>> providerMap = new HashMap<>();
 
+    private final GroovyClassLoader classLoader = new GroovyClassLoader(getClass().getClassLoader())
+
     private ScriptPlugin scriptPlugin
 
     @Override
@@ -22,6 +24,7 @@ class GroovierModule extends AbstractModule {
         if (scriptPlugin == null) {
             throw new IllegalStateException("scriptPluginClass is not set")
         }
+        bind(GroovyClassLoader.class).toInstance(classLoader)
         bind(ScriptCacheManager.class).to(GroovierCacheManager.class).in(Scopes.SINGLETON)
         bind(ScriptPlugin.class).toInstance(scriptPlugin)
         reloadableSet.forEach(reloadable -> {

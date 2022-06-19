@@ -17,38 +17,37 @@ class GroovierScriptLoader {
 
     @Inject
     private ScriptPlugin plugin
-
     @Inject
     private GroovierLifeCycle lifeCycle
-
     @Inject
     private ScriptCacheManager cacheManager
+    @Inject
+    private GroovyClassLoader classLoader
 
     CompletableFuture<Void> loadAllScripts() {
-        try (def classLoader = new GroovyClassLoader(plugin.getClass().getClassLoader())) {
-            CompletableFuture<Void> future = new CompletableFuture<>()
-            CompletableFuture.runAsync(() -> {
-                var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
-                if (globalLibraries.exists()) {
-                    plugin.logger.info("loading global libraries...")
-                    classLoader.parseClass(globalLibraries)
-                    plugin.logger.info("global libraries loaded.")
-                }
-                loaders.forEach(loader -> {
-                    plugin.getLogger().info("Loading ${loader.class.simpleName}")
-                    loader.load(classLoader)
-                    plugin.getLogger().info("${loader.class.simpleName} loading completed.")
-                })
-                loaders.forEach(loader -> loader.afterLoad())
-                (cacheManager as GroovierCacheManager).flush()
-            }).thenAccept((v) -> {
-                plugin.runSyncTask(() -> {
-                    lifeCycle.onScriptLoad()
-                    future.complete(v)
-                })
+        CompletableFuture<Void> future = new CompletableFuture<>()
+        CompletableFuture.runAsync(() -> {
+            var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
+            if (globalLibraries.exists()) {
+                plugin.logger.info("loading global libraries...")
+                classLoader.parseClass(globalLibraries)
+                plugin.logger.info("global libraries loaded.")
+            }
+            loaders.forEach(loader -> {
+                plugin.getLogger().info("Loading ${loader.class.simpleName}")
+                loader.load(classLoader)
+                plugin.getLogger().info("${loader.class.simpleName} loading completed.")
             })
-            return future
-        }
+            loaders.forEach(loader -> loader.afterLoad())
+            ((GroovierCacheManager)cacheManager).flush()
+        }).thenAccept((v) -> {
+            plugin.logger.info("All Scripts loaded.")
+            plugin.runSyncTask(() -> {
+                lifeCycle.onScriptLoad()
+                future.complete(v)
+            })
+        })
+        return future
     }
 
     void unloadAllScripts() {
