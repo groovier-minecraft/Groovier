@@ -19,9 +19,10 @@ class LifeCycleScriptsManager implements ScriptLoader, ScriptValidator, Groovier
 
     @Inject
     private ScriptPlugin plugin
-
     @Inject
     private GroovierAPI api
+    @Inject
+    private ScriptCacheManager cacheManager
 
     @Override
     void unload() {
@@ -45,7 +46,7 @@ class LifeCycleScriptsManager implements ScriptLoader, ScriptValidator, Groovier
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".groovy")) {
                 try {
-                    var script = (Class<?>) classLoader.parseClass(file)
+                    var script = cacheManager.getScriptOrLoad(file, classLoader)
                     this.validate(script)
 
                     lifeCycleScripts.add(script)

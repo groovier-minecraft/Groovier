@@ -19,6 +19,9 @@ class ArgumentScriptManager implements ScriptLoader, ArgumentParser, ScriptValid
     @Inject
     private ServiceInjector provider;
 
+    @Inject
+    private ScriptCacheManager cacheManager;
+
     private final GroovierAPI api = GroovierCore.api
 
 
@@ -41,7 +44,7 @@ class ArgumentScriptManager implements ScriptLoader, ArgumentParser, ScriptValid
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".groovy")) {
                 try {
-                    var script = (Class<?>) classLoader.parseClass(file)
+                    Class<?> script = cacheManager.getScriptOrLoad(file, classLoader)
                     this.validate(script)
                     var applier = script.getMethod("apply", String.class)
                     var type = applier.getGenericReturnType()

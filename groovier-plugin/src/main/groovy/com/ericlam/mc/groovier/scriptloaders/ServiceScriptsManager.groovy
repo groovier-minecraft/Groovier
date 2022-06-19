@@ -1,6 +1,6 @@
 package com.ericlam.mc.groovier.scriptloaders
 
-
+import com.ericlam.mc.groovier.ScriptCacheManager
 import com.ericlam.mc.groovier.ScriptLoader
 import com.ericlam.mc.groovier.ScriptPlugin
 import com.ericlam.mc.groovier.ServiceInjector
@@ -11,11 +11,13 @@ import javax.inject.Inject
 
 class ServiceScriptsManager implements ScriptLoader, ServiceInjector {
     private final Set<Class<?>> serviceScripts = new HashSet<>()
-    @Inject
-    private Injector base
 
     @Inject
+    private Injector base
+    @Inject
     private ScriptPlugin plugin
+    @Inject
+    private ScriptCacheManager cacheManager
 
     private Injector injector
 
@@ -38,7 +40,7 @@ class ServiceScriptsManager implements ScriptLoader, ServiceInjector {
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".groovy")) {
                 try {
-                    var script = (Class<?>) classLoader.parseClass(file)
+                    var script = cacheManager.getScriptOrLoad(file, classLoader)
                     serviceScripts.add(script)
                 } catch (ValidateFailedException e) {
                     plugin.getLogger().warning("Service Script '${file.getName()}' validation failed: ${e.getMessage()}")

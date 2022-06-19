@@ -10,7 +10,6 @@ import javax.inject.Provider
 class GroovierModule extends AbstractModule {
 
     private final Set<Class<? extends ScriptLoader>> reloadableSet = new HashSet<>()
-    private final GroovyClassLoader classLoader = new GroovyClassLoader(getClass().getClassLoader())
 
     private final Map<Class, Object> registerMap = new HashMap<>()
     private final Map<Class, Class> classMap = new HashMap<>()
@@ -23,7 +22,7 @@ class GroovierModule extends AbstractModule {
         if (scriptPlugin == null) {
             throw new IllegalStateException("scriptPluginClass is not set")
         }
-        bind(GroovyClassLoader.class).toInstance(classLoader)
+        bind(ScriptCacheManager.class).to(GroovierCacheManager.class).in(Scopes.SINGLETON)
         bind(ScriptPlugin.class).toInstance(scriptPlugin)
         reloadableSet.forEach(reloadable -> {
             Multibinder<ScriptLoader> reloadableBinder = Multibinder.newSetBinder(binder(), ScriptLoader.class)

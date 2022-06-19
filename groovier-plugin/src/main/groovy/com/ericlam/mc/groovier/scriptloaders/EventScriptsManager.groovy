@@ -1,6 +1,6 @@
 package com.ericlam.mc.groovier.scriptloaders
 
-
+import com.ericlam.mc.groovier.ScriptCacheManager
 import com.ericlam.mc.groovier.ScriptLoader
 import com.ericlam.mc.groovier.ScriptPlugin
 import com.ericlam.mc.groovier.ValidateFailedException
@@ -13,10 +13,10 @@ class EventScriptsManager implements ScriptLoader {
 
     @Inject
     private ScriptPlugin plugin
-
     @Inject
     private EventRegister eventRegister
-
+    @Inject
+    private ScriptCacheManager cacheManager
 
     @Override
     void unload() {
@@ -37,7 +37,7 @@ class EventScriptsManager implements ScriptLoader {
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".groovy")) {
                 try {
-                    var script = (Class<?>) classLoader.parseClass(file)
+                    var script = cacheManager.getScriptOrLoad(file, classLoader)
                     eventRegister.validate(script)
                     eventScripts.add(script)
                 } catch (ValidateFailedException e) {

@@ -1,6 +1,6 @@
 package com.ericlam.mc.groovier.scriptloaders
 
-
+import com.ericlam.mc.groovier.ScriptCacheManager
 import com.ericlam.mc.groovier.ScriptLoader
 import com.ericlam.mc.groovier.ScriptPlugin
 import com.ericlam.mc.groovier.ValidateFailedException
@@ -15,6 +15,8 @@ class CommandScriptsManager implements ScriptLoader {
     private ScriptPlugin plugin
     @Inject
     private CommandRegister commandRegister
+    @Inject
+    private ScriptCacheManager cacheManager
 
     @Override
     void unload() {
@@ -57,7 +59,7 @@ class CommandScriptsManager implements ScriptLoader {
                 if (commandFile.getName().endsWith(".groovy")) {
                     try {
                         var name = commandFile.getName().substring(0, commandFile.getName().length() - 7).toLowerCase()
-                        var script = (Class<?>) groovyClassLoader.parseClass(commandFile)
+                        var script = cacheManager.getScriptOrLoad(commandFile, groovyClassLoader)
                         commandRegister.validate(script)
                         commandTrees.put(name, script)
                     } catch (ValidateFailedException e) {
