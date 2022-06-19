@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/ericlam/mc/groovier/GroovierAPI.html#addScriptLoader(java.lang.Class)" class="member-name-link">addScriptLoader(Class&lt;? extends ScriptLoader&gt;)</a> - Method in interface com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/GroovierAPI.html" title="interface in com.ericlam.mc.groovier">GroovierAPI</a></dt>
@@ -127,6 +127,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">priority of script loading order</div>
 </dd>
+<dt><a href="com/ericlam/mc/groovier/ScriptCacheManager.html#getScriptOrLoad(java.io.File,groovy.lang.GroovyClassLoader)" class="member-name-link">getScriptOrLoad(File, GroovyClassLoader)</a> - Method in interface com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/ScriptCacheManager.html" title="interface in com.ericlam.mc.groovier">ScriptCacheManager</a></dt>
+<dd>
+<div class="block">get the script class from cache, if not cached, load it and cache it</div>
+</dd>
+<dt><a href="com/ericlam/mc/groovier/ScriptCacheManager.html#getScriptOrLoad(java.lang.String,groovy.lang.GroovyClassLoader)" class="member-name-link">getScriptOrLoad(String, GroovyClassLoader)</a> - Method in interface com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/ScriptCacheManager.html" title="interface in com.ericlam.mc.groovier">ScriptCacheManager</a></dt>
+<dd>
+<div class="block">get the script class from cache, if not cached, load it and cache it</div>
+</dd>
 <dt><a href="com/ericlam/mc/groovier/GroovierAPI.html#getServiceInjector()" class="member-name-link">getServiceInjector()</a> - Method in interface com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/GroovierAPI.html" title="interface in com.ericlam.mc.groovier">GroovierAPI</a></dt>
 <dd>
 <div class="block">get injector (with service injection) for guice</div>
@@ -141,6 +149,17 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/ericlam/mc/groovier/GroovierCore.html#%3Cinit%3E()" class="member-name-link">GroovierCore()</a> - Constructor for class com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/GroovierCore.html" title="class in com.ericlam.mc.groovier">GroovierCore</a></dt>
 <dd>&nbsp;</dd>
+</dl>
+<h2 class="title" id="I:I">I</h2>
+<dl class="index">
+<dt><a href="com/ericlam/mc/groovier/ScriptCacheManager.html#isCached(java.io.File)" class="member-name-link">isCached(File)</a> - Method in interface com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/ScriptCacheManager.html" title="interface in com.ericlam.mc.groovier">ScriptCacheManager</a></dt>
+<dd>
+<div class="block">check if the script is cached (with md5 hash mapping)</div>
+</dd>
+<dt><a href="com/ericlam/mc/groovier/ScriptCacheManager.html#isCached(java.lang.String)" class="member-name-link">isCached(String)</a> - Method in interface com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/ScriptCacheManager.html" title="interface in com.ericlam.mc.groovier">ScriptCacheManager</a></dt>
+<dd>
+<div class="block">check if the script is cached (with md5 hash mapping)</div>
+</dd>
 </dl>
 <h2 class="title" id="I:L">L</h2>
 <dl class="index">
@@ -163,6 +182,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
+<dt><a href="com/ericlam/mc/groovier/ScriptCacheManager.html" class="type-name-link" title="interface in com.ericlam.mc.groovier">ScriptCacheManager</a> - Interface in <a href="com/ericlam/mc/groovier/package-summary.html">com.ericlam.mc.groovier</a></dt>
+<dd>
+<div class="block">a script cache manager</div>
+</dd>
 <dt><a href="com/ericlam/mc/groovier/ScriptLoader.html" class="type-name-link" title="interface in com.ericlam.mc.groovier">ScriptLoader</a> - Interface in <a href="com/ericlam/mc/groovier/package-summary.html">com.ericlam.mc.groovier</a></dt>
 <dd>
 <div class="block">a script loader interface</div>
@@ -198,7 +221,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/ericlam/mc/groovier/ValidateFailedException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">ValidateFailedException(String)</a> - Constructor for exception class com.ericlam.mc.groovier.<a href="com/ericlam/mc/groovier/ValidateFailedException.html" title="class in com.ericlam.mc.groovier">ValidateFailedException</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 <footer role="contentinfo">
 <hr>
 <p class="legal-copy"><small>Copyright &#169; 2022. All rights reserved.</small></p>
