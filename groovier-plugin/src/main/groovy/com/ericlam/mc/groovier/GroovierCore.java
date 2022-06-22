@@ -61,7 +61,6 @@ public class GroovierCore implements GroovierAPI {
             if (e != null) {
                 plugin.getLogger().severe("error while loading scripts: "+e.getMessage());
                 e.printStackTrace();
-                return;
             }
             lifeCycle = injector.getInstance(GroovierLifeCycle.class);
             plugin.runSyncTask(() -> lifeCycle.onEnable());
