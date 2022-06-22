@@ -38,9 +38,17 @@ class GroovierScriptLoader {
                 loader.load(classLoader)
                 plugin.getLogger().info("${loader.class.simpleName} loading completed.")
             })
-            loaders.forEach(loader -> loader.afterLoad())
+            loaders.forEach(loader -> {
+                plugin.getLogger().info("Initializing ${loader.class.simpleName}")
+                loader.afterLoad()
+                plugin.getLogger().info("${loader.class.simpleName} initializing completed.")
+            })
             ((GroovierCacheManager)cacheManager).flush()
-        }).thenAccept((v) -> {
+        }).whenComplete((v, ex ) -> {
+            if (ex != null){
+                future.completeExceptionally(ex)
+                return
+            }
             plugin.logger.info("All Scripts loaded.")
             plugin.runSyncTask(() -> {
                 lifeCycle.onScriptLoad()

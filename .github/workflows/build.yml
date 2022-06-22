@@ -20,7 +20,7 @@ jobs:
       - uses: eric2788/maven-jar-publish@v2
         with:
           java-version: 18
-          body: fix optional command argument problem
+          body: fix not throwing exception and stucked at loading when there is an error while script loading
           upload-module: './groovier-plugin'
       - name: 'Update javadocs'
         id: update-javadoc
