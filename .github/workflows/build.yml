@@ -53,7 +53,7 @@ jobs:
           active_profiles: '[ "github" ]'
           servers: '[
                   {  "id": "github", "username": "eric2788", "password": "${{ secrets.GITHUB_TOKEN }}" },
-                  { "id": "nexus-dnmc", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }
+                  { "id": "nexus-repo", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }
                 ]'
       - name: Publish package
         run: mvn --batch-mode clean deploy

@@ -277,8 +277,8 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus-dnmc</id>
-            <url>https://nexus.pulogo.xyz/repository/mc-plugins/</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/groovier-minecraft/groovier</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
     </distributionManagement>
