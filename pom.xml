@@ -294,9 +294,7 @@
         <profile>
             <id>nexus-repo</id>
             <activation>
-                <file>
-                    <exists>pom.xml</exists>
-                </file>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <distributionManagement>
                 <repository>
