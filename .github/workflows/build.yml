@@ -48,7 +48,7 @@ jobs:
         with:
           java-version: '18'
           distribution: 'adopt'
-      - uses: whelk-io/maven-settings-xml-action@v4
+      - uses: whelk-io/maven-settings-xml-action@main
         with:
           active_profiles: '[ "github" ]'
           servers: '[
@@ -56,7 +56,7 @@ jobs:
                   { "id": "nexus-repo", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }
                 ]'
       - name: Publish package
-        run: mvn --batch-mode clean deploy
+        run: mvn --batch-mode -P github clean deploy
         if: ${{ steps.version.outputs.length <= 3 }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

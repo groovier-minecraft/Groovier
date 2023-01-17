@@ -6,7 +6,7 @@
 
     <groupId>org.groovier</groupId>
     <artifactId>groovier</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>pom</packaging>
 
     <name>Groovier</name>
@@ -226,13 +226,13 @@
             <dependency>
                 <groupId>org.spigotmc</groupId>
                 <artifactId>spigot-api</artifactId>
-                <version>1.19-R0.1-SNAPSHOT</version>
+                <version>1.19.3-R0.1-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>net.md-5</groupId>
                 <artifactId>bungeecord-api</artifactId>
-                <version>1.18-R0.1-SNAPSHOT</version>
+                <version>1.19-R0.1-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>
@@ -275,12 +275,35 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <repository>
+    <profiles>
+        <profile>
             <id>github</id>
-            <url>https://maven.pkg.github.com/groovier-minecraft/groovier</url>
-            <uniqueVersion>true</uniqueVersion>
-        </repository>
-    </distributionManagement>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/groovier-minecraft/groovier</url>
+                    <uniqueVersion>true</uniqueVersion>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>nexus-repo</id>
+            <activation>
+                <property>
+                    <name>chu77</name>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>chu77</id>
+                    <url>https://maven.pkg.github.com/groovier-minecraft/groovier</url>
+                    <uniqueVersion>true</uniqueVersion>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
