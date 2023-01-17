@@ -279,7 +279,9 @@
         <profile>
             <id>github</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>GITHUB_TOKEN</name>
+                </property>
             </activation>
             <distributionManagement>
                 <repository>
@@ -291,6 +293,11 @@
         </profile>
         <profile>
             <id>nexus-repo</id>
+            <activation>
+                <file>
+                    <exists>pom.xml</exists>
+                </file>
+            </activation>
             <distributionManagement>
                 <repository>
                     <id>nexus-repo</id>
