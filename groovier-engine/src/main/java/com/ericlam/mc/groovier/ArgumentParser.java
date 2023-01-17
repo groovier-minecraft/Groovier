@@ -3,7 +3,6 @@ package com.ericlam.mc.groovier;
 import com.google.inject.TypeLiteral;
 
 import java.lang.reflect.Type;
-import java.util.function.Function;
 
 /**
  * mainly use for command argument
