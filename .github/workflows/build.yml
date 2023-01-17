@@ -50,7 +50,7 @@ jobs:
           distribution: 'adopt'
       - uses: whelk-io/maven-settings-xml-action@main
         with:
-          active_profiles: '[ "github" ]'
+          active_profiles: '[ "github", "nexus-repo" ]'
           servers: '[
                   {  "id": "github", "username": "eric2788", "password": "${{ secrets.GITHUB_TOKEN }}" },
                   { "id": "nexus-repo", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }

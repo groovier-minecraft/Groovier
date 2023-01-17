@@ -291,15 +291,10 @@
         </profile>
         <profile>
             <id>nexus-repo</id>
-            <activation>
-                <property>
-                    <name>chu77</name>
-                </property>
-            </activation>
             <distributionManagement>
                 <repository>
-                    <id>chu77</id>
-                    <url>https://maven.pkg.github.com/groovier-minecraft/groovier</url>
+                    <id>nexus-repo</id>
+                    <url>https://xuancat.app:8443/repository/java</url>
                     <uniqueVersion>true</uniqueVersion>
                 </repository>
             </distributionManagement>
