@@ -98,4 +98,9 @@ class GroovierPlugin extends Plugin implements ScriptPlugin {
     void runSyncTask(Runnable runnable) {
         runnable.run()
     }
+
+    @Override
+    void runAsyncTask(Runnable runnable) {
+        proxy.scheduler.runAsync(this, runnable)
+    }
 }

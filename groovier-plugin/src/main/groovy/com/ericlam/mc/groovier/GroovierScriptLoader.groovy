@@ -14,7 +14,6 @@ class GroovierScriptLoader {
         this.loaders = loaders.sort().toList()
     }
 
-
     @Inject
     private ScriptPlugin plugin
     @Inject
@@ -26,7 +25,7 @@ class GroovierScriptLoader {
 
     CompletableFuture<Void> loadAllScripts() {
         CompletableFuture<Void> future = new CompletableFuture<>()
-        CompletableFuture.runAsync(() -> {
+        plugin.runAsyncTask {
             var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
             if (globalLibraries.exists()) {
                 plugin.logger.info("loading global libraries...")
@@ -44,17 +43,12 @@ class GroovierScriptLoader {
                 plugin.getLogger().info("${loader.class.simpleName} initializing completed.")
             })
             ((GroovierCacheManager)cacheManager).flush()
-        }).whenComplete((v, ex ) -> {
-            if (ex != null){
-                future.completeExceptionally(ex)
-                return
-            }
             plugin.logger.info("All Scripts loaded.")
-            plugin.runSyncTask(() -> {
+            plugin.runSyncTask {
                 lifeCycle.onScriptLoad()
-                future.complete(v)
-            })
-        })
+                future.complete(null)
+            }
+        }
         return future
     }
 
