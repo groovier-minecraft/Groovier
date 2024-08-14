@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Checkout Source Code
         id: checkout-source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - uses: eric2788/maven-jar-publish@v3
         with:
           java-version: 18
@@ -36,7 +36,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: latest-tag
       - uses: jungwinter/split@v2
