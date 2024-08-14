@@ -1,0 +1,24 @@
+name: build artifacts
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        id: checkout-source
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 18
+      - name: 'Package Jar'
+        run: mvn -B package --file ./pom.xml
+      - name: 'upload artifacts'
+        id: upload-artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: groovier-plugin
+          path: './groovier-plugin/target'
