@@ -10,5 +10,5 @@ import net.md_5.bungee.api.chat.TextComponent
 
 @CommandScript(description = 'say something')
 void say(CommandSender sender, @CommandArg('message') String[] message) {
-    sender.sendMessage(TextComponent.fromLegacyText("${sender.name} says: ${String.join(' ', message)}"))
+    sender.sendMessage(TextComponent.fromLegacy("${sender.name} says: ${String.join(' ', message)}"))
 }

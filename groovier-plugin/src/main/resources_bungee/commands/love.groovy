@@ -10,7 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent
 
 @CommandScript(description = 'love what?')
 void love(CommandSender sender, @CommandArg('target') String target) {
-    sender.sendMessage(TextComponent.fromLegacyText("oh, you love $target"))
+    sender.sendMessage(TextComponent.fromLegacy("oh, you love $target"))
 }
 
 List<String> tabComplete(CommandSender sender, String[] args) {

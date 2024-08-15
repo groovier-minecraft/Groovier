@@ -19,5 +19,5 @@ import javax.inject.Inject
 
 @CommandScript(description = 'minus two numbers')
 void minus(CommandSender sender, @CommandArg('one') int a, @CommandArg('two') int b) {
-    sender.sendMessage(TextComponent.fromLegacyText("$a - $b = ${mathService.minus(a, b)}"))
+    sender.sendMessage(TextComponent.fromLegacy("$a - $b = ${mathService.minus(a, b)}"))
 }

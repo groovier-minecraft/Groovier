@@ -69,7 +69,7 @@ class GroovierScriptLoader {
 
     CompletableFuture<Void> reloadAllScripts() {
         if (loading.get()) {
-            return CompletableFuture.failedFuture(new IllegalStateException("Scripts are still loading."))
+            return CompletableFuture.failedFuture(new ScriptLoadingException())
         }
         this.unloadAllScripts()
         return this.loadAllScripts()

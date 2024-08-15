@@ -245,7 +245,7 @@ class BungeeCommandInvoker {
 
 
     private static BaseComponent[] text(String str) {
-        return TextComponent.fromLegacyText(str)
+        return TextComponent.fromLegacy(str)
     }
 
 }

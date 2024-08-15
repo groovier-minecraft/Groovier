@@ -1,6 +1,7 @@
 package com.ericlam.mc.groovier.bungee
 
 import com.ericlam.mc.groovier.GroovierCore
+import com.ericlam.mc.groovier.ScriptLoadingException
 import com.ericlam.mc.groovier.ScriptPlugin
 import com.ericlam.mc.groovier.scriptloaders.CommandRegister
 import com.ericlam.mc.groovier.scriptloaders.EventRegister
@@ -34,29 +35,33 @@ class GroovierPlugin extends Plugin implements ScriptPlugin {
             @Override
             void execute(CommandSender sender, String[] args) {
                 if (hasPermission(sender)) {
-                    sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.RED}no permission."))
+                    sender.sendMessage(TextComponent.fromLegacy("${ChatColor.RED}no permission."))
                 }
                 if (args.length == 0) {
-                    sender.sendMessage(TextComponent.fromLegacyText("Usage: /groovier reload | version"))
+                    sender.sendMessage(TextComponent.fromLegacy("Usage: /groovier reload | version"))
                     return
                 }
                 if (args[0].equalsIgnoreCase("reload")) {
                     core.reloadAllScripts().whenComplete((v, ex) -> {
                         if (ex != null) {
-                            sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.RED}Failed to reload scripts: " + ex.getMessage()))
-                            ex.printStackTrace()
+                            if (ex instanceof ScriptLoadingException) {
+                                sender.sendMessage(TextComponent.fromLegacy("${ChatColor.GOLD}Script is still loading, please wait until complete."))
+                            } else {
+                                sender.sendMessage(TextComponent.fromLegacy("${ChatColor.RED}Failed to reload scripts: " + ex.getMessage()))
+                                ex.printStackTrace()
+                            }
                         } else {
-                            sender.sendMessage(TextComponent.fromLegacyText("${ChatColor.GREEN}Successfully reloaded scripts"))
+                            sender.sendMessage(TextComponent.fromLegacy("${ChatColor.GREEN}Successfully reloaded scripts"))
                         }
                     })
 
                     return
                 }
                 if (args[0].equalsIgnoreCase("version")) {
-                    sender.sendMessage(TextComponent.fromLegacyText("Groovier v${getDescription().getVersion()} by ${getDescription().getAuthor()}"))
+                    sender.sendMessage(TextComponent.fromLegacy("Groovier v${getDescription().getVersion()} by ${getDescription().getAuthor()}"))
                     return
                 }
-                sender.sendMessage(TextComponent.fromLegacyText("Usage: /groovier reload | version"))
+                sender.sendMessage(TextComponent.fromLegacy("Usage: /groovier reload | version"))
             }
         }
 

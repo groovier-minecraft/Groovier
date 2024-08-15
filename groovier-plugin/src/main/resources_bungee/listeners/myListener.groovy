@@ -12,10 +12,10 @@ void onPlayerChat(ChatEvent e){
     var player = e.sender as ProxiedPlayer
     if (e.message == 'ping'){
         e.cancelled = true
-        player.sendMessage(TextComponent.fromLegacyText("pong!"))
+        player.sendMessage(TextComponent.fromLegacy("pong!"))
     } else if (e.message == 'pong') {
         e.cancelled = true
-        player.sendMessage(TextComponent.fromLegacyText("ping!"))
+        player.sendMessage(TextComponent.fromLegacy("ping!"))
     }
 }
 

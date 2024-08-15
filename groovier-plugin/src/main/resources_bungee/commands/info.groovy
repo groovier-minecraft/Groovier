@@ -14,12 +14,12 @@ void info(CommandSender sender, @CommandArg(value = 'player', optional = true) P
     if (player == null && sender instanceof ProxiedPlayer) {
         player = (ProxiedPlayer)sender
     } else if (player == null) {
-        sender.sendMessage(TextComponent.fromLegacyText("Please specify a player"))
+        sender.sendMessage(TextComponent.fromLegacy("Please specify a player"))
         return
     }
 
-    sender.sendMessage(TextComponent.fromLegacyText("Player: ${player.name}"))
-    sender.sendMessage(TextComponent.fromLegacyText("UUID: ${player.uniqueId}"))
-    sender.sendMessage(TextComponent.fromLegacyText("Ping: ${player.ping}"))
+    sender.sendMessage(TextComponent.fromLegacy("Player: ${player.name}"))
+    sender.sendMessage(TextComponent.fromLegacy("UUID: ${player.uniqueId}"))
+    sender.sendMessage(TextComponent.fromLegacy("Ping: ${player.ping}"))
 }
 
