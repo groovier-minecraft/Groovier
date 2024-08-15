@@ -1,6 +1,7 @@
 package com.ericlam.mc.groovier.spigot
 
 import com.ericlam.mc.groovier.GroovierCore
+import com.ericlam.mc.groovier.ScriptLoadingException
 import com.ericlam.mc.groovier.ScriptPlugin
 import com.ericlam.mc.groovier.scriptloaders.CommandRegister
 import com.ericlam.mc.groovier.scriptloaders.EventRegister
@@ -77,8 +78,12 @@ class GroovierPlugin extends JavaPlugin implements ScriptPlugin {
             case "reload":
                 core.reloadAllScripts().whenComplete{v, ex ->
                     if (ex != null){
-                        ex.printStackTrace()
-                        sender.sendMessage("${ChatColor.RED}Failed to reload scripts: " + ex.getMessage())
+                        if (ex instanceof ScriptLoadingException) {
+                            sender.sendMessage("${ChatColor.GOLD}Script is still loading, please wait until complete.")
+                        } else {
+                            sender.sendMessage("${ChatColor.RED}Failed to reload scripts: " + ex.getMessage())
+                            ex.printStackTrace()
+                        }
                     } else {
                         sender.sendMessage("${ChatColor.GREEN}Successfully reloaded scripts")
                     }

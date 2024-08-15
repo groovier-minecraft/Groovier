@@ -16,6 +16,6 @@ import javax.inject.Inject
 
 @CommandScript(description = 'add two numbers')
 void add(CommandSender sender, @CommandArg('one') int a, @CommandArg(value = 'two', optional = true) int b = 1) {
-    sender.sendMessage(TextComponent.fromLegacyText("$a + $b = ${mathService.add(a, b)}"))
+    sender.sendMessage(TextComponent.fromLegacy("$a + $b = ${mathService.add(a, b)}"))
 }
 
