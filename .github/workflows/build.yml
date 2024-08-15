@@ -51,8 +51,7 @@ jobs:
       - uses: whelk-io/maven-settings-xml-action@main
         with:
           servers: '[
-                  {  "id": "github", "username": "eric2788", "password": "${{ secrets.GITHUB_TOKEN }}" },
-                  { "id": "nexus-repo", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }
+                  {  "id": "github", "username": "eric2788", "password": "${{ secrets.GITHUB_TOKEN }}" }
                 ]'
       - name: Publish package (github)
         run: mvn --batch-mode clean deploy -P github
@@ -60,7 +59,3 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish package (xuan)
-        run: mvn --batch-mode clean deploy -P nexus-repo
-        if: ${{ steps.version.outputs.length <= 3 }}
-        continue-on-error: true
