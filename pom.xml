@@ -18,7 +18,7 @@
     </modules>
 
     <properties>
-        <java.version>18</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -101,7 +101,7 @@
                     <configuration>
                         <links>
                             <link>https://google.github.io/guice/api-docs/latest/javadoc/</link>
-                            <link>https://docs.oracle.com/en/java/javase/18/docs/api/</link>
+                            <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
                             <link>https://docs.oracle.com/javaee/6/api/javax/inject/</link>
                             <link>https://docs.groovy-lang.org/latest/html/api/</link>
                         </links>
@@ -237,7 +237,7 @@
             <dependency>
                 <groupId>net.md-5</groupId>
                 <artifactId>bungeecord-api</artifactId>
-                <version>1.21-R0.1-SNAPSHOT</version>
+                <version>1.19-R0.1-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>
