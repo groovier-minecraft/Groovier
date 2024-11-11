@@ -18,7 +18,8 @@
     </modules>
 
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -28,7 +29,7 @@
                 <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <version>1.13.1</version>
+                    <version>4.0.1</version>
                     <executions>
                         <execution>
                             <goals>
@@ -57,7 +58,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                     <executions>
                         <execution>
                             <id>save-resources</id>
@@ -89,7 +90,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.3.2</version>
+                    <version>3.11.1</version>
                     <executions>
                         <execution>
                             <id>attach-javadocs</id>
@@ -106,7 +107,6 @@
                             <link>https://docs.groovy-lang.org/latest/html/api/</link>
                         </links>
                         <show>public</show>
-                        <isOffline>false</isOffline>
                         <linksource>true</linksource>
                         <encoding>UTF-8</encoding>
                         <windowtitle>Groovier</windowtitle>
@@ -116,7 +116,6 @@
                         <version>true</version>
                         <linksource>true</linksource>
                         <notimestamp>true</notimestamp>
-                        <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
                         <outputDirectory>../javadocs</outputDirectory>
                         <detectJavaApiLink>true</detectJavaApiLink>
                     </configuration>
@@ -124,7 +123,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>3.3.1</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -137,11 +136,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
+                    <version>3.13.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.codehaus.groovy</groupId>
@@ -153,7 +148,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.4</version>
+                    <version>3.6.0</version>
                     <executions>
                         <execution>
                             <phase>package</phase>
@@ -211,12 +206,12 @@
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy-dep</artifactId>
-                <version>1.12.10</version>
+                <version>1.15.10</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
-                <version>23.0.0</version>
+                <version>26.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.groovier</groupId>
@@ -231,20 +226,20 @@
             <dependency>
                 <groupId>org.spigotmc</groupId>
                 <artifactId>spigot-api</artifactId>
-                <version>1.20.4-R0.1-SNAPSHOT</version>
+                <version>1.21.1-R0.1-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>net.md-5</groupId>
                 <artifactId>bungeecord-api</artifactId>
-                <version>1.19-R0.1-SNAPSHOT</version>
+                <version>1.20-R0.1</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
-                <version>5.1.0</version>
+                <version>6.0.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>javax.inject</groupId>
@@ -260,7 +255,7 @@
             <dependency>
                 <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy</artifactId>
-                <version>4.0.22</version>
+                <version>4.0.24</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
