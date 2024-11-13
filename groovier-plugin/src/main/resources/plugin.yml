@@ -3,6 +3,7 @@ description: "A Scripts Engine based on Groovy"
 author: "Eric Lam"
 website: "https://github.com/eric2788"
 version: ${project.version}
+api-version: "1.21"
 main: com.ericlam.mc.groovier.spigot.GroovierPlugin
 commands:
   groovier:
