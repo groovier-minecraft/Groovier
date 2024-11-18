@@ -25,11 +25,15 @@ class GroovierScriptLoader {
     @Inject
     private GroovyClassLoader classLoader
 
+    void addClassPath() {
+        classLoader.addClasspath(plugin.pluginFolder.path)
+    }
+
     CompletableFuture<Void> loadAllScripts() {
         this.loading.compareAndSet(false, true)
         CompletableFuture<Void> future = new CompletableFuture<>()
         plugin.runAsyncTask {
-            var globalLibraries = new File(plugin.getPluginFolder(), "grapesConfig.groovy")
+            var globalLibraries = new File(plugin.pluginFolder, "grapesConfig.groovy")
             if (globalLibraries.exists()) {
                 plugin.logger.info("loading global libraries...")
                 classLoader.parseClass(globalLibraries)

@@ -57,6 +57,7 @@ public class GroovierCore implements GroovierAPI {
     public void onEnable(ScriptPlugin plugin) {
         injector = Guice.createInjector(groovierModule);
         loader = injector.getInstance(GroovierScriptLoader.class);
+        loader.addClassPath();
         loader.loadAllScripts().whenComplete((v, e) -> {
             if (e != null) {
                 plugin.getLogger().severe("error while loading scripts: "+e.getMessage());

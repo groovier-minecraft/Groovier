@@ -1,6 +1,5 @@
 package services
 
-
 class MathService {
 
     int add(int a, int b) {
