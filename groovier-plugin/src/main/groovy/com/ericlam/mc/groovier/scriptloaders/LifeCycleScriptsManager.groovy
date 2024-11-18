@@ -35,8 +35,8 @@ class LifeCycleScriptsManager implements ScriptLoader, ScriptValidator, Groovier
 
     @Override
     void load(GroovyClassLoader classLoader) {
-        File listenerFolder = new File(plugin.getPluginFolder(), "lifecycles")
-        var files = listenerFolder.listFiles()
+        File lifecycleFolder = new File(plugin.getPluginFolder(), "lifecycles")
+        var files = lifecycleFolder.listFiles()
 
         if (files == null) {
             plugin.getLogger().info("No lifecycles scripts found.")
@@ -55,7 +55,7 @@ class LifeCycleScriptsManager implements ScriptLoader, ScriptValidator, Groovier
                     plugin.getLogger().warning("Lifecycle Script '${file.getName()}' validation failed: ${e.getMessage()}")
                 } catch (Exception e) {
                     e.printStackTrace()
-                    plugin.getLogger().warning("Failed to load event script: " + file.getName())
+                    plugin.getLogger().warning("Failed to load lifecycle script: " + file.getName())
                 }
             }
         }

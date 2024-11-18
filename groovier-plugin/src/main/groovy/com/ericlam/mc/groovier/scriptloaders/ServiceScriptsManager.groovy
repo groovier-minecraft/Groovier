@@ -29,8 +29,8 @@ class ServiceScriptsManager implements ScriptLoader, ServiceInjector {
 
     @Override
     void load(GroovyClassLoader classLoader) {
-        File listenerFolder = new File(plugin.getPluginFolder(), "services")
-        var files = listenerFolder.listFiles()
+        File servicesFolder = new File(plugin.getPluginFolder(), "services")
+        var files = servicesFolder.listFiles()
 
         if (files == null) {
             plugin.getLogger().info("No services scripts found.")
@@ -46,7 +46,7 @@ class ServiceScriptsManager implements ScriptLoader, ServiceInjector {
                     plugin.getLogger().warning("Service Script '${file.getName()}' validation failed: ${e.getMessage()}")
                 } catch (Exception e) {
                     e.printStackTrace()
-                    plugin.getLogger().warning("Failed to load event script: " + file.getName())
+                    plugin.getLogger().warning("Failed to load service script: " + file.getName())
                 }
             }
         }
