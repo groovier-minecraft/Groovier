@@ -10,7 +10,7 @@ class GroovierCacheManager implements ScriptCacheManager {
 
     @Override
     boolean isCached(File content) throws IOException {
-        return this.isCached(content.text)
+        return false // let it load by groovy class loader
     }
 
     @Override
@@ -20,7 +20,6 @@ class GroovierCacheManager implements ScriptCacheManager {
 
     @Override
     Class<?> getScriptOrLoad(String content, GroovyClassLoader classLoader) throws Exception {
-
         var md5 = generateMD5(content)
         cached.add(md5)
         if (this.scriptCacheMap.containsKey(md5)) {
@@ -35,9 +34,8 @@ class GroovierCacheManager implements ScriptCacheManager {
 
     @Override
     Class<?> getScriptOrLoad(File file, GroovyClassLoader classLoader) throws Exception {
-        return this.getScriptOrLoad(file.text, classLoader)
+        return classLoader.parseClass(file) // groovy class loader already cached the script
     }
-
 
     private static def generateMD5(String s){
         MessageDigest.getInstance("MD5").digest(s.bytes).encodeHex().toString()

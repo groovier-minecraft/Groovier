@@ -64,6 +64,7 @@ class GroovierScriptLoader {
             loader.unload()
             plugin.getLogger().info("${loader.class.simpleName} unloaded.")
         })
+        classLoader.clearCache()
         this.loading.compareAndSet(true, false)
     }
 
