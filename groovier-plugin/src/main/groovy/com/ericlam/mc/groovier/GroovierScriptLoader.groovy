@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class GroovierScriptLoader {
 
-    private final AtomicBoolean loading = new AtomicBoolean(false)
+    private final AtomicBoolean reloading = new AtomicBoolean(false)
     private final List<ScriptLoader> loaders
 
     @Inject
@@ -30,54 +30,54 @@ class GroovierScriptLoader {
     }
 
     CompletableFuture<Void> loadAllScripts() {
-        this.loading.compareAndSet(false, true)
         CompletableFuture<Void> future = new CompletableFuture<>()
         plugin.runAsyncTask {
-            var globalLibraries = new File(plugin.pluginFolder, "grapesConfig.groovy")
-            if (globalLibraries.exists()) {
-                plugin.logger.info("loading global libraries...")
-                classLoader.parseClass(globalLibraries)
-                plugin.logger.info("global libraries loaded.")
-            }
-            loaders.forEach(loader -> {
-                plugin.getLogger().info("Loading ${loader.class.simpleName}")
-                loader.load(classLoader)
-                plugin.getLogger().info("${loader.class.simpleName} loading completed.")
-            })
-            loaders.forEach(loader -> {
-                plugin.getLogger().info("Initializing ${loader.class.simpleName}")
-                loader.afterLoad()
-                plugin.getLogger().info("${loader.class.simpleName} initializing completed.")
-            })
-            ((GroovierCacheManager)cacheManager).flush()
-            plugin.logger.info("All Scripts loaded.")
-            plugin.runSyncTask {
-                lifeCycle.onScriptLoad()
-                this.loading.compareAndSet(true, false)
-                future.complete(null)
+            try {
+                var globalLibraries = new File(plugin.pluginFolder, "grapesConfig.groovy")
+                if (globalLibraries.exists()) {
+                    plugin.logger.info("loading global libraries...")
+                    classLoader.parseClass(globalLibraries)
+                    plugin.logger.info("global libraries loaded.")
+                }
+                loaders.each { loader ->
+                    plugin.logger.info("Loading ${loader.class.simpleName}")
+                    loader.load(classLoader)
+                    plugin.logger.info("${loader.class.simpleName} loading completed.")
+                }
+                loaders.each { loader ->
+                    plugin.logger.info("Initializing ${loader.class.simpleName}")
+                    loader.afterLoad()
+                    plugin.logger.info("${loader.class.simpleName} initializing completed.")
+                }
+                ((GroovierCacheManager)cacheManager).flush()
+                plugin.logger.info("All Scripts loaded.")
+                plugin.runSyncTask {
+                    lifeCycle.onScriptLoad()
+                    future.complete(null)
+                }
+            } catch (Exception e) {
+                future.completeExceptionally(e)
             }
         }
         return future
     }
 
     void unloadAllScripts() {
-        this.loading.compareAndSet(false, true)
         lifeCycle.onScriptUnload()
-        loaders.forEach(loader -> {
-            plugin.getLogger().info("Unloading ${loader.class.simpleName}")
+        loaders.each { loader ->
+            plugin.logger.info("Unloading ${loader.class.simpleName}")
             loader.unload()
-            plugin.getLogger().info("${loader.class.simpleName} unloaded.")
-        })
+            plugin.logger.info("${loader.class.simpleName} unloaded.")
+        }
         classLoader.clearCache()
-        this.loading.compareAndSet(true, false)
     }
 
     CompletableFuture<Void> reloadAllScripts() {
-        if (loading.get()) {
+        if (!reloading.compareAndSet(false, true)) {
             return CompletableFuture.failedFuture(new ScriptLoadingException())
         }
         this.unloadAllScripts()
-        return this.loadAllScripts()
+        return this.loadAllScripts().whenComplete { reloading.set(false) }
     }
 
 }
