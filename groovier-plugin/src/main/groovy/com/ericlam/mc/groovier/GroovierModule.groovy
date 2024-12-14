@@ -1,6 +1,7 @@
 package com.ericlam.mc.groovier
 
 import com.google.inject.AbstractModule
+import com.google.inject.Module
 import com.google.inject.Scopes
 import com.google.inject.multibindings.Multibinder
 
@@ -13,7 +14,9 @@ class GroovierModule extends AbstractModule {
 
     private final Map<Class, Object> registerMap = new HashMap<>()
     private final Map<Class, Class> classMap = new HashMap<>()
-    private final Map<Class, Class<Provider<?>>> providerMap = new HashMap<>();
+    private final Map<Class, Class<Provider<?>>> providerMap = new HashMap<>()
+
+    private final Set<Module> modules = new HashSet<>()
 
     private final GroovyClassLoader classLoader = new GroovyClassLoader(getClass().getClassLoader())
 
@@ -34,6 +37,7 @@ class GroovierModule extends AbstractModule {
         registerMap.forEach((type, obj) -> bind(type).toInstance(obj))
         classMap.forEach((type, clazz) -> bind(type).to(clazz).in(Scopes.SINGLETON))
         providerMap.forEach((type, provider) -> bind(type).toProvider(provider).in(Scopes.SINGLETON))
+        modules.forEach(this::install)
     }
 
 
@@ -59,6 +63,10 @@ class GroovierModule extends AbstractModule {
 
     def <T extends ScriptValidator> void bindRegisters(Class<T> validator, T ins) {
         this.registerMap.put(validator, ins)
+    }
+
+    def installModule(Module module) {
+        this.modules.add(module)
     }
 
 }
