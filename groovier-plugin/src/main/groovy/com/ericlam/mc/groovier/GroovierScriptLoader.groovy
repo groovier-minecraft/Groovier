@@ -3,10 +3,12 @@ package com.ericlam.mc.groovier
 import com.ericlam.mc.groovier.scriptloaders.GroovierLifeCycle
 
 import javax.inject.Inject
+import javax.inject.Singleton
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
-class GroovierScriptLoader {
+@Singleton
+class GroovierScriptLoader implements ScriptManager {
 
     private final AtomicBoolean reloading = new AtomicBoolean(false)
     private final List<ScriptLoader> loaders
@@ -29,7 +31,7 @@ class GroovierScriptLoader {
         classLoader.addClasspath(plugin.pluginFolder.path)
     }
 
-    CompletableFuture<Void> loadAllScripts() {
+    CompletableFuture<Void> loadAllScripts(List<ScriptLoader> loaders = this.loaders) {
         CompletableFuture<Void> future = new CompletableFuture<>()
         plugin.runAsyncTask {
             try {
@@ -62,7 +64,7 @@ class GroovierScriptLoader {
         return future
     }
 
-    void unloadAllScripts() {
+    void unloadAllScripts(List<ScriptLoader> loaders = this.loaders) {
         lifeCycle.onScriptUnload()
         loaders.each { loader ->
             plugin.logger.info("Unloading ${loader.class.simpleName}")
@@ -72,12 +74,17 @@ class GroovierScriptLoader {
         classLoader.clearCache()
     }
 
-    CompletableFuture<Void> reloadAllScripts() {
+    CompletableFuture<Void> reloadAllScripts(List<ScriptLoader> loaders = this.loaders) {
         if (!reloading.compareAndSet(false, true)) {
             return CompletableFuture.failedFuture(new ScriptLoadingException())
         }
-        this.unloadAllScripts()
-        return this.loadAllScripts().thenRun { reloading.set(false) }
+        this.unloadAllScripts(loaders)
+        return this.loadAllScripts(loaders).thenRun { reloading.set(false) }
+    }
+
+    @Override
+    CompletableFuture<Void> reloadScript(Class<? extends ScriptLoader> loader) {
+        return this.reloadAllScripts(this.loaders.findAll { loader.isAssignableFrom(it.class) })
     }
 
 }

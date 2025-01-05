@@ -37,6 +37,7 @@ public class GroovierCore implements GroovierAPI, GroovierAddon {
         this.addScriptLoader(EventScriptsManager.class);
         this.addScriptLoader(ArgumentScriptManager.class);
         this.addScriptLoader(LifeCycleScriptsManager.class);
+        this.bindType(ScriptManager.class, GroovierScriptLoader.class);
         this.bindProvider(ArgumentParser.class, ArgumentParserProvider.class);
         this.bindProvider(ServiceInjector.class, ServiceInjectorProvider.class);
         this.bindProvider(GroovierLifeCycle.class, GroovierLifeCycleProvider.class);
