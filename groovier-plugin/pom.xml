@@ -10,9 +10,9 @@
 
     <packaging>pom</packaging>
     <modules>
+        <module>groovier-common</module>
         <module>groovier-mc-plugin</module>
         <module>groovier-eld-plugin</module>
-        <module>groovier-common</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>
