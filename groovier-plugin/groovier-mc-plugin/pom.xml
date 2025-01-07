@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.groovier</groupId>
+        <artifactId>groovier-plugin</artifactId>
+        <version>0.0.55-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>groovier-mc-plugin</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.groovier</groupId>
+            <artifactId>groovier-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <outputFile>${user.dir}/outputs/${build.finalName}.jar</outputFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

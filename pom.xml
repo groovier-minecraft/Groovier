@@ -27,6 +27,27 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>javadocs</directory>
+                                <includes>
+                                    <include>**/*</include>
+                                </includes>
+                            </fileset>
+                            <fileset>
+                                <directory>outputs</directory>
+                                <includes>
+                                    <include>**/*</include>
+                                </includes>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
                     <version>4.0.1</version>

@@ -1,0 +1,14 @@
+name: Groovier
+description: "A Scripts Engine based on Groovy with ELD Edited"
+author: "Eric Lam"
+website: "https://github.com/eric2788"
+version: ${project.version}
+api-version: "1.21"
+main: com.ericlam.mc.groovier.spigot.GroovierPlugin
+commands:
+  groovier:
+    usage: /groovier reload|version
+    description: "Reload Groovy Scripts"
+    permission: groovier.use
+    permission-message: "You don't have permission to use this command."
+depend: [ELDependenci]

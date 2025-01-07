@@ -8,11 +8,16 @@
         <version>0.0.55-SNAPSHOT</version>
     </parent>
 
+    <packaging>pom</packaging>
+    <modules>
+        <module>groovier-mc-plugin</module>
+        <module>groovier-eld-plugin</module>
+        <module>groovier-common</module>
+    </modules>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>groovier-plugin</artifactId>
-    <version>${project.parent.version}-1.21</version>
 
     <dependencies>
         <dependency>
@@ -22,6 +27,16 @@
         <dependency>
             <groupId>org.groovier</groupId>
             <artifactId>groovier-engine</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.inject</groupId>
+                    <artifactId>guice</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -34,10 +49,6 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy-dep</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
